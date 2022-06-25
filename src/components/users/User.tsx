@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { userType } from '../../state/slice/userSlice';
 
 type userPropsType = {
@@ -7,9 +8,19 @@ type userPropsType = {
 
 const User: React.FunctionComponent<userPropsType> = ({props}) => {
   return (
-    <div>
-        {props.nombre}
-    </div>
+    <tbody>
+      <tr>
+        <td>{props.nombre}</td>
+        <td>{props.rol}</td>
+
+        <div>
+        <Link to='/sendMoney' style={{ textDecoration: 'none' }}>
+          <button>Enviar Dinero</button>
+        </Link>
+      </div>
+      </tr>
+       
+    </tbody>
   )
 };
 

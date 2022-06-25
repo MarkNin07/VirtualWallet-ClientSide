@@ -24,19 +24,16 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
 
   return (
     <div>
+      <h1>Tu Perfil</h1>
       <table>
+        <thead>
         <tr>
           <td>Nombre</td>
           <td>Rol</td>
         </tr>
+        </thead>
         {getUsers.map((user) => <User key={user.id} props={user} />)}
       </table>
-
-      <div>
-        <Link to='/sendMoney' style={{ textDecoration: 'none' }}>
-          <button>Enviar Dinero</button>
-        </Link>
-      </div>
 
       <br />
 

@@ -13,11 +13,11 @@ const User: React.FunctionComponent<userPropsType> = ({props}) => {
         <td>{props.nombre}</td>
         <td>{props.rol}</td>
 
-        <div>
+        <td>
         <Link to='/sendMoney' style={{ textDecoration: 'none' }}>
           <button>Enviar Dinero</button>
         </Link>
-      </div>
+      </td>
       </tr>
        
     </tbody>

@@ -16,22 +16,33 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
 
     const signInForm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    if(email && password){
+
+   const regularExpression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]{2}).{8,}$/
+
+    if(email && password.match(regularExpression)){
         createUserWithEmailAndPassword(auth, email, password)
         .then((result)=>{            
             sendEmailVerification(result.user)
             console.log(result.user.emailVerified)
+            alert("Se ha enviado un correo de verificación. Revisa tu bandeja de entrada o de correos no deseados")
         })
         .catch((error)=>{
             const errorMessage = error.message
             if(errorMessage === "Firebase: Error (auth/email-already-in-use)."){
                 alert('Revisa tu bandeja de entrada o Spam. Verifica el correo con el link enviado')          
             }
+
+            if(errorMessage === "Firebase: Error (auth/invalid-email)."){
+                alert('Has ingresado un correo incorrecto')          
+            }
+            
             console.log(errorMessage);
             
         });
         setEmail('')
         setPassword('')
+    }else{
+        alert("Ambos campos deben estar con información valida. La contraseña debe contar con al menos: Una letra en mayúscula, Una letra en minúscula, Un dígito, Dos caracteres especiales, y al menos ocho caracteres")
     }
     
     }
@@ -44,7 +55,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                     <label htmlFor="username">Email</label>
                     <input 
                      onChange={(e) => setEmail(e.target.value)}
-                     type='text' 
+                     type='email' 
                      name='Email'
                      value={email} />
                 </div>

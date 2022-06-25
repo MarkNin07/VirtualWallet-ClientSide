@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { sendEmailVerification } from 'firebase/auth'
 import { auth } from '../../fireabseConfig'
+import { userType } from '../../state/slice/userSlice';
+import { nanoid } from '@reduxjs/toolkit';
+import { useAppDispatch } from '../../store';
+import { createUser } from '../../actions/createUser';
 
 interface ISingInProps {
 }
@@ -13,7 +17,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
 
-
+    const dispatch = useAppDispatch()
 
     const signInForm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
@@ -21,6 +25,18 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
         const regularExpression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]{2}).{8,}$/
 
         if (email && password.match(regularExpression)) {
+            const newUser: userType={
+                id: nanoid(),
+                nombre: name,
+                correo: email,
+                contraseña: password,
+                rol: 'colaborador',
+                estaActivo: false,
+                correoVerificado: false
+            }
+
+            dispatch(createUser(newUser))
+
             createUserWithEmailAndPassword(auth, email, password)
                 .then((result) => {
                     sendEmailVerification(result.user)

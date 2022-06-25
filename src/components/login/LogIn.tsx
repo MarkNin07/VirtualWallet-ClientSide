@@ -23,7 +23,7 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
   const { emailState } = useSelector((state: RootState) => state.logged)
 
   //trae el string del email
-  //console.log("email de state",emailState)
+  console.log("email de state",emailState)
 
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
 
           if (result.user.emailVerified) {
             setUserVerified(result.user.emailVerified)
-            const email = userVerified
+            const email = result.user.email
             dispatch(logInInReducer(email))
             navigate('/perfil')
 
@@ -57,6 +57,7 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
           console.log(result.user.emailVerified);
           console.log(result.user.email)
           console.log('email del email', email)
+          console.log("email de state",emailState)
         })
         .catch(error => {
           const errorMessage = error.message

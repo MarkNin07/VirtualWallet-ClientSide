@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { createUser } from "../../actions/createUser"
 import { getAllUsers } from "../../actions/getAllUsers"
 import { RootState } from "../../store"
 
@@ -50,6 +51,18 @@ const userSlice = createSlice({
             state.status = posibleStatus.FAILED
             state.error = "Ocurrio algún error mientras se solicitaba la información"
             state.users = []
+        })
+        //post users
+        builder.addCase(createUser.pending,(state)=>{
+            state.status = posibleStatus.PENDING
+        })
+        builder.addCase(createUser.fulfilled,(state,action)=>{
+            state.status = posibleStatus.COMPLETED
+            state.users.push(action.payload)
+        })
+        builder.addCase(createUser.rejected,(state)=>{
+            state.status = posibleStatus.FAILED
+            state.error = "Ocurrio algún error mientras se solicitaba la información"
         })
     }
 })

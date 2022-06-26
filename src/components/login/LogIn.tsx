@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getAllUsers } from '../../actions/getAllUsers';
+
 import { updateUser } from '../../actions/updateUser';
 import { auth } from '../../fireabseConfig';
 import { logInInReducer } from '../../state/slice/loggedInSlice';
@@ -16,13 +17,23 @@ interface ILogInProps {
 const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  
-  const getUsers = useSelector(selectUsersState())
-  const userToChangeVerify = getUsers.find((user) => user.correo===email) 
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const dispatchApp = useAppDispatch()
+  
+  const status = useSelector(selectUsersStatus())
+  const getUsers = useSelector(selectUsersState())
+
+  useEffect(() => {
+    if (status === posibleStatus.IDLE) {
+      dispatchApp(getAllUsers())
+    }
+  }, [dispatch])
+  
+  
+  const userToChangeVerify = getUsers.filter((user) => user.correo===email && user.contraseña===password)[0] 
+  //console.log(userToChangeVerify);  
 
   const { emailState } = useSelector((state: RootState) => state.logged)
 
@@ -64,11 +75,10 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
               correoVerificado: result.user.emailVerified
             }
             dispatchApp(updateUser(updatedUser))
-            console.log(updatedUser)
+            //console.log(updatedUser)
             navigate('/perfil')
 
           }
-
           //viene como true, si es true cambiar el objeto usuario
          /* console.log(result.user.emailVerified);
           console.log(result.user.email)

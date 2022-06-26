@@ -12,13 +12,13 @@ export enum posibleStatus{
 }
 
 type userType = {
-    id: string,
-    nombre: string,
-    correo: string,
-    contraseña: string,
-    rol: string,
-    estaActivo: boolean,
-    correoVerificado: boolean,
+    id: string | undefined,
+    nombre: string | undefined,
+    correo: string | null,
+    contraseña: string | undefined,
+    rol: string | undefined,
+    estaActivo: boolean | undefined,
+    correoVerificado: boolean | undefined,
 }
 
 interface initialStateType {

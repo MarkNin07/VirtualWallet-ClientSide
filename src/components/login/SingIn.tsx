@@ -6,8 +6,10 @@ import { auth } from '../../fireabseConfig'
 import { selectUsersState, userType } from '../../state/slice/userSlice';
 import { nanoid } from '@reduxjs/toolkit';
 import { useAppDispatch } from '../../store';
-import { createUser } from '../../actions/createUser';
+import { createUser } from '../../actions/user/createUser';
 import { useSelector } from 'react-redux';
+import { accountType } from '../../state/slice/accountSlice';
+import { createAccount } from '../../actions/account/createAccount';
 
 interface ISingInProps {
 }
@@ -31,6 +33,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
             if (getUsers.find(user => user.correo === email)) {
                 alert("El correo ingresado ya existe en la base de datos, por favor ingresa otro.")
             } else {
+                //dispatch para crear el usuario al registrarse
                 const newUser: userType = {
                     id: nanoid(),
                     nombre: name,
@@ -40,8 +43,15 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                     estaActivo: false,
                     correoVerificado: false
                 }
-
                 dispatch(createUser(newUser))
+
+                //dispatch para crear la cuenta asociada a ese usuario
+                const newAccount: accountType ={
+                    id:nanoid(),
+                    correoUsuario: email,
+                    monto: 0
+                }
+                dispatch(createAccount(newAccount))
 
                 createUserWithEmailAndPassword(auth, email, password)
                     .then((result) => {

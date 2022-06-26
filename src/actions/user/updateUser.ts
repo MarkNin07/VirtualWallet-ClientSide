@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { userType } from '../state/slice/userSlice'
+import { userType } from "../../state/slice/userSlice";
+
 
 const updateUserUrl = 'http://localhost:8080/api/update-user'
 

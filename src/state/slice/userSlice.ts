@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { createUser } from "../../actions/createUser"
-import { getAllUsers } from "../../actions/getAllUsers"
-import { updateUser } from "../../actions/updateUser"
+import { createUser } from "../../actions/user/createUser"
+import { getAllUsers } from "../../actions/user/getAllUsers"
+import { updateUser } from "../../actions//user/updateUser"
 import { RootState } from "../../store"
 
 export enum posibleStatus{

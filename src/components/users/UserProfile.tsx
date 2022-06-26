@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getAllUsers } from '../../actions/getAllUsers';
+import { getAllUsers } from '../../actions/user/getAllUsers';
 import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
 import { RootState, useAppDispatch } from '../../store';
 import User from './User';
@@ -18,8 +18,8 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
 
   const { emailState } = useSelector((state: RootState) => state.logged)
   //console.log('este es el email en el estado', emailState);
-  
-  const realUser: userType|undefined = getUsers.find((user) => user.correo === emailState)
+
+  const realUser: userType | undefined = getUsers.find((user) => user.correo === emailState)
   //console.log('este es el usuario real que tengo luego de encontrarlo',realUser);
 
 
@@ -40,20 +40,12 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
             <td>Correo</td>
           </tr>
         </thead>
-        {/*getUsers.map((user) =>
-          <User key={user.id} props={user} />
-  )*/}
-    {<User key={realUser?.id} props={realUser} />}
+        {<User key={realUser?.id} props={realUser} />}
       </table>
-
       <br />
-
       <div>
         <button>Ver Movimientos</button>
       </div>
-
-
-
     </div>
   )
 };

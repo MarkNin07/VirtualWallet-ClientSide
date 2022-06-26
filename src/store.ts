@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import usuarioReducer from './state/slice/userSlice'
 import loggedInReducer from './state/slice/loggedInSlice'
 import verifiedInReducer from './state/slice/verifiedSlice'
+import accountReducer from './state/slice/accountSlice'
 
 
 
@@ -10,7 +11,8 @@ const store = configureStore({
     reducer:{
         users: usuarioReducer,
         logged: loggedInReducer,
-        verified: verifiedInReducer
+        verified: verifiedInReducer,
+        accounts: accountReducer
     }
 })
 

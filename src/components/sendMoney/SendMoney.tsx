@@ -6,7 +6,7 @@ interface ISendMoneyProps {
 const SendMoney: React.FunctionComponent<ISendMoneyProps> = (props) => {
   return (
     <div>
-        Formulario para enviar dinero
+        Formulario para enviar dinero con el que creo la transaccion
     </div>
   )
 };

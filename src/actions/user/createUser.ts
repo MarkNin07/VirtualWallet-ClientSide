@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { userType } from '../state/slice/userSlice'
+import { userType } from '../../state/slice/userSlice'
 
 const createUserUrl = 'http://localhost:8080/api/save-usuario'
 

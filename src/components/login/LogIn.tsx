@@ -2,9 +2,9 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getAllUsers } from '../../actions/getAllUsers';
+import { getAllUsers } from '../../actions/user/getAllUsers';
 
-import { updateUser } from '../../actions/updateUser';
+import { updateUser } from '../../actions/user/updateUser';
 import { auth } from '../../fireabseConfig';
 import { logInInReducer } from '../../state/slice/loggedInSlice';
 import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';

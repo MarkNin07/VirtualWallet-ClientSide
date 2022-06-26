@@ -4,7 +4,7 @@ import { accountType } from "../../state/slice/accountSlice";
 //cambiar por el endpoint correto
 const updateAccountUrl = 'algun endpoint de put'
 
-export const updateUser = createAsyncThunk('updateUser', async(account:accountType)=>{
+export const updateAccount = createAsyncThunk('updateUser', async(account:accountType)=>{
     const response = await fetch(updateAccountUrl,{
         method: 'PUT',
         headers: {

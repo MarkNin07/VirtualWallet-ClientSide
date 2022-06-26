@@ -15,7 +15,7 @@ const User: React.FunctionComponent<userPropsType> = ({props}) => {
         <td>{props?.rol}</td>
         <td>{props?.correo}</td>
         <td>
-        <Link to='/sendMoney' style={{ textDecoration: 'none' }}>
+        <Link to='/sendMoney' style={{ textDecoration: 'none' }} state={{stateSend: props?.id}}>
           <button>Enviar Dinero</button>
         </Link>
       </td>

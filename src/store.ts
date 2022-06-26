@@ -4,6 +4,7 @@ import usuarioReducer from './state/slice/userSlice'
 import loggedInReducer from './state/slice/loggedInSlice'
 import verifiedInReducer from './state/slice/verifiedSlice'
 import accountReducer from './state/slice/accountSlice'
+import transactionReducer from './state/slice/transactionSlice'
 
 
 
@@ -12,7 +13,8 @@ const store = configureStore({
         users: usuarioReducer,
         logged: loggedInReducer,
         verified: verifiedInReducer,
-        accounts: accountReducer
+        accounts: accountReducer,
+        transactions: transactionReducer
     }
 })
 

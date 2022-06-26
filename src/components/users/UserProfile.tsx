@@ -12,22 +12,18 @@ interface IUserListProps {
 const UserList: React.FunctionComponent<IUserListProps> = (props) => {
 
   const dispatch = useAppDispatch();
-
-  const getUsers = useSelector(selectUsersState())
-  const status = useSelector(selectUsersStatus())
-
-  const { emailState } = useSelector((state: RootState) => state.logged)
-  //console.log('este es el email en el estado', emailState);
-
-  const realUser: userType | undefined = getUsers.find((user) => user.correo === emailState)
-  //console.log('este es el usuario real que tengo luego de encontrarlo',realUser);
-
-
   useEffect(() => {
     if (status === posibleStatus.IDLE) {
       dispatch(getAllUsers())
     }
   }, [dispatch])
+
+  const getUsers = useSelector(selectUsersState())
+  const status = useSelector(selectUsersStatus())
+
+  const { emailState } = useSelector((state: RootState) => state.logged)
+
+  const realUser: userType | undefined = getUsers.find((user) => user.correo === emailState)
 
   return (
     <div>

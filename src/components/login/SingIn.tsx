@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { sendEmailVerification } from 'firebase/auth'
 import { auth } from '../../fireabseConfig'
-import { selectUsersState, userType } from '../../state/slice/userSlice';
+import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
 import { nanoid } from '@reduxjs/toolkit';
 import { useAppDispatch } from '../../store';
 import { createUser } from '../../actions/user/createUser';
 import { useSelector } from 'react-redux';
 import { accountType } from '../../state/slice/accountSlice';
 import { createAccount } from '../../actions/account/createAccount';
+import { getAllUsers } from '../../actions/user/getAllUsers';
 
 interface ISingInProps {
 }
@@ -21,6 +22,14 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
     const [name, setName] = useState('')
 
     const dispatch = useAppDispatch()
+    const status = useSelector(selectUsersStatus())
+
+    useEffect(() => {
+        if (status === posibleStatus.IDLE) {
+            dispatch(getAllUsers())
+        }
+      }, [dispatch])
+
     const getUsers = useSelector(selectUsersState())
 
     const signInForm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -56,7 +65,6 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                 createUserWithEmailAndPassword(auth, email, password)
                     .then((result) => {
                         sendEmailVerification(result.user)
-                        console.log(result.user.emailVerified)
                         alert("Se ha enviado un correo de verificación. Revisa tu bandeja de entrada o de correos no deseados")
                     })
                     .catch((error) => {
@@ -67,10 +75,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
 
                         if (errorMessage === "Firebase: Error (auth/invalid-email).") {
                             alert('Has ingresado un correo incorrecto')
-                        }
-
-                        console.log(errorMessage);
-
+                        }                        
                     });
             }
             setEmail('')

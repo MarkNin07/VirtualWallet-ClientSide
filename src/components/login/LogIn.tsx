@@ -54,7 +54,6 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
       signInWithEmailAndPassword(auth, email, password)
         .then((result) => {
           if (!result.user.emailVerified) {
-            //alert('Necesitas verificar tu cuenta antes de iniciar sesión')
             const verified = result.user.emailVerified
             dispatch(verifiedInInReducer(verified))
             navigate('/verifyEmail')
@@ -74,16 +73,9 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
               estaActivo: false,
               correoVerificado: result.user.emailVerified
             }
-            dispatchApp(updateUser(updatedUser))
-            //console.log(updatedUser)
+            dispatchApp(updateUser(updatedUser))           
             navigate('/perfil')
-
           }
-          //viene como true, si es true cambiar el objeto usuario
-         /* console.log(result.user.emailVerified);
-          console.log(result.user.email)
-          console.log('email del email', email)
-          console.log("email de state",emailState)*/
         })
         .catch(error => {
           const errorMessage = error.message

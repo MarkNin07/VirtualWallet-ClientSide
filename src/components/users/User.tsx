@@ -7,6 +7,7 @@ type userPropsType = {
 }
 
 const User: React.FunctionComponent<userPropsType> = ({props}) => {
+  console.log('este es el verificado luego de iniciar sesion',props?.correoVerificado);
   return (
     <tbody>
       <tr>

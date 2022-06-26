@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { createUser } from "../../actions/createUser"
 import { getAllUsers } from "../../actions/getAllUsers"
+import { updateUser } from "../../actions/updateUser"
 import { RootState } from "../../store"
 
 export enum posibleStatus{
@@ -61,6 +62,20 @@ const userSlice = createSlice({
             state.users.push(action.payload)
         })
         builder.addCase(createUser.rejected,(state)=>{
+            state.status = posibleStatus.FAILED
+            state.error = "Ocurrio algún error mientras se solicitaba la información"
+        })
+        //Put 
+        builder.addCase(updateUser.pending,(state)=>{
+            state.status = posibleStatus.PENDING
+        })
+        builder.addCase(updateUser.fulfilled,(state,action)=>{
+            state.status = posibleStatus.COMPLETED
+            let productUpdated = state.users.filter(user=>user.id===action.payload.id)[0]
+            let positionProductUpdated = state.users.indexOf(productUpdated)
+            state.users[positionProductUpdated] = action.payload
+        })
+        builder.addCase(updateUser.rejected,(state)=>{
             state.status = posibleStatus.FAILED
             state.error = "Ocurrio algún error mientras se solicitaba la información"
         })

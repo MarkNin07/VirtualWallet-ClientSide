@@ -17,10 +17,10 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
   const status = useSelector(selectUsersStatus())
 
   const { emailState } = useSelector((state: RootState) => state.logged)
-  console.log('este es el email en el estado', emailState);
+  //console.log('este es el email en el estado', emailState);
   
   const realUser: userType|undefined = getUsers.find((user) => user.correo === emailState)
-  console.log('este es el usuario real que tengo luego de encontrarlo',realUser);
+  //console.log('este es el usuario real que tengo luego de encontrarlo',realUser);
 
 
   useEffect(() => {

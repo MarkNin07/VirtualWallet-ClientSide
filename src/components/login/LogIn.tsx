@@ -27,7 +27,7 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
   const { emailState } = useSelector((state: RootState) => state.logged)
 
   //trae el string del email
-  console.log("email de state",emailState)
+  //console.log("email de state",emailState)
 
 
   useEffect(() => {

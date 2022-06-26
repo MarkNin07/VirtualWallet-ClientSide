@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { sendEmailVerification } from 'firebase/auth'
 import { auth } from '../../fireabseConfig'
-import { userType } from '../../state/slice/userSlice';
+import { selectUsersState, userType } from '../../state/slice/userSlice';
 import { nanoid } from '@reduxjs/toolkit';
 import { useAppDispatch } from '../../store';
 import { createUser } from '../../actions/createUser';
+import { useSelector } from 'react-redux';
 
 interface ISingInProps {
 }
@@ -18,6 +19,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
     const [name, setName] = useState('')
 
     const dispatch = useAppDispatch()
+    const getUsers = useSelector(selectUsersState())
 
     const signInForm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
@@ -25,37 +27,42 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
         const regularExpression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]{2}).{8,}$/
 
         if (email && password.match(regularExpression)) {
-            const newUser: userType={
-                id: nanoid(),
-                nombre: name,
-                correo: email,
-                contraseña: password,
-                rol: 'colaborador',
-                estaActivo: false,
-                correoVerificado: false
+
+            if (getUsers.find(user => user.correo === email)) {
+                alert("El correo ingresado ya existe en la base de datos, por favor ingresa otro.")
+            } else {
+                const newUser: userType = {
+                    id: nanoid(),
+                    nombre: name,
+                    correo: email,
+                    contraseña: password,
+                    rol: 'colaborador',
+                    estaActivo: false,
+                    correoVerificado: false
+                }
+
+                dispatch(createUser(newUser))
+
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then((result) => {
+                        sendEmailVerification(result.user)
+                        console.log(result.user.emailVerified)
+                        alert("Se ha enviado un correo de verificación. Revisa tu bandeja de entrada o de correos no deseados")
+                    })
+                    .catch((error) => {
+                        const errorMessage = error.message
+                        if (errorMessage === "Firebase: Error (auth/email-already-in-use).") {
+                            alert('Revisa tu bandeja de entrada o Spam. Verifica el correo con el link enviado')
+                        }
+
+                        if (errorMessage === "Firebase: Error (auth/invalid-email).") {
+                            alert('Has ingresado un correo incorrecto')
+                        }
+
+                        console.log(errorMessage);
+
+                    });
             }
-
-            dispatch(createUser(newUser))
-
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((result) => {
-                    sendEmailVerification(result.user)
-                    console.log(result.user.emailVerified)
-                    alert("Se ha enviado un correo de verificación. Revisa tu bandeja de entrada o de correos no deseados")
-                })
-                .catch((error) => {
-                    const errorMessage = error.message
-                    if (errorMessage === "Firebase: Error (auth/email-already-in-use).") {
-                        alert('Revisa tu bandeja de entrada o Spam. Verifica el correo con el link enviado')
-                    }
-
-                    if (errorMessage === "Firebase: Error (auth/invalid-email).") {
-                        alert('Has ingresado un correo incorrecto')
-                    }
-
-                    console.log(errorMessage);
-
-                });
             setEmail('')
             setPassword('')
             setName('')

@@ -15,7 +15,7 @@ type userType = {
     id: string | undefined,
     nombre: string | undefined,
     correo: string | null,
-    contraseña: string | undefined,
+    contrasena: string | undefined,
     rol: string | undefined,
     estaActivo: boolean | undefined,
     correoVerificado: boolean | undefined,

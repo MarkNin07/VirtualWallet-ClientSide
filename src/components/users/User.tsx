@@ -1,26 +1,43 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { userType } from '../../state/slice/userSlice';
+import { getAllAccountsFinal } from '../../actions/account/getAllAccounts';
+
+import { selectAccountsState, selectAccountsStatus } from '../../state/slice/accountSlice';
+import { posibleStatus, userType } from '../../state/slice/userSlice';
+import { useAppDispatch } from '../../store';
 
 type userPropsType = {
-    props: userType|undefined
+  props: userType | undefined
 }
 
-const User: React.FunctionComponent<userPropsType> = ({props}) => {
-  //console.log('este es el verificado luego de iniciar sesion',props?.correoVerificado);
+const User: React.FunctionComponent<userPropsType> = ({ props }) => {
+  const status = useSelector(selectAccountsStatus())
+  const getAccounts = useSelector(selectAccountsState())
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (status === posibleStatus.IDLE) {
+      dispatch(getAllAccountsFinal())
+    }
+  }, [dispatch])
+
+  const userAccount = getAccounts.filter((account) => account.correoUsuario === props!.correo)[0]
+
   return (
     <tbody>
       <tr>
         <td>{props?.nombre}</td>
         <td>{props?.rol}</td>
         <td>{props?.correo}</td>
+        <td>{userAccount?.monto}</td>
         <td>
-        <Link to='/sendMoney' style={{ textDecoration: 'none' }} state={{stateSend: props?.id}}>
-          <button>Enviar Dinero</button>
-        </Link>
-      </td>
+          <Link to='/sendMoney' style={{ textDecoration: 'none' }} state={{ stateSend: props?.id }}>
+            <button>Enviar Dinero</button>
+          </Link>
+        </td>
       </tr>
-       
+
     </tbody>
   )
 };

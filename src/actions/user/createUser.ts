@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { userType } from '../../state/slice/userSlice'
 
-const createUserUrl = 'http://localhost:8080/api/save-usuario'
+const createUserUrl = 'http://localhost:8080/post/user' 
 
 export const createUser = createAsyncThunk('createUser', async(user:userType)=>{
     const response = await fetch(createUserUrl,{

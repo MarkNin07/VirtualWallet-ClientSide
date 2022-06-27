@@ -2,9 +2,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { accountType } from "../../state/slice/accountSlice";
 
 //cambiar por el endpoint correto
-const updateAccountUrl = 'algun endpoint de put'
+const updateAccountUrl = 'http://localhost:8080/update/cuenta'
 
-export const updateAccount = createAsyncThunk('updateUser', async(account:accountType)=>{
+export const updateAccount = createAsyncThunk('updateAccount', async(account:accountType)=>{
     const response = await fetch(updateAccountUrl,{
         method: 'PUT',
         headers: {

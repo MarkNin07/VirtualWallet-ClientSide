@@ -47,7 +47,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                     id: nanoid(),
                     nombre: name,
                     correo: email,
-                    contraseña: password,
+                    contrasena: password,
                     rol: 'colaborador',
                     estaActivo: false,
                     correoVerificado: false
@@ -58,7 +58,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                 const newAccount: accountType ={
                     id:nanoid(),
                     correoUsuario: email,
-                    monto: 0
+                    monto: 10000
                 }
                 dispatch(createAccount(newAccount))
 

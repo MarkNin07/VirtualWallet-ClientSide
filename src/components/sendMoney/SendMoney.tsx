@@ -1,17 +1,23 @@
+import { nanoid } from '@reduxjs/toolkit';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import { getAllAccounts } from '../../actions/account/getAllAccounts';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getAllAccountsFinal } from '../../actions/account/getAllAccounts';
 import { getAllUsers } from '../../actions/user/getAllUsers';
-import { selectAccountsState, selectAccountsStatus } from '../../state/slice/accountSlice';
+import { accountType, selectAccountsState, selectAccountsStatus } from '../../state/slice/accountSlice';
+import { transactionType } from '../../state/slice/transactionSlice';
 import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
 import { useAppDispatch } from '../../store';
+import moment from 'moment';
+import { createTransaction } from '../../actions/transactions/createTransaction';
+import { updateAccount } from '../../actions/account/updateAccount';
 
 interface stateBecauseSend {
   stateSend: string
 }
 
 const SendMoney: React.FunctionComponent = (props) => {
+  const navigate = useNavigate()
   const [productoDestino, setProductoDestino] = useState('')
   const [monto, setMonto] = useState(0)
 
@@ -29,57 +35,102 @@ const SendMoney: React.FunctionComponent = (props) => {
   const statusAccounts = useSelector(selectAccountsStatus())
   useEffect(() => {
     if (statusAccounts === posibleStatus.IDLE) {
-      dispatch(getAllAccounts())
+      dispatch(getAllAccountsFinal())
     }
   }, [dispatch])
 
   const location = useLocation()
   const state = location.state as stateBecauseSend
-  const {stateSend} = state
+  const { stateSend } = state
 
   const getUsers = useSelector(selectUsersState())
 
-  //con el id puedo saber quien es el usuario origen
-  const usuarioOrigen = getUsers.find((user)=>user.id === stateSend) as userType
+  const usuarioOrigen = getUsers.find((user) => user.id === stateSend) as userType
 
-  //debo traer la cuenta origen y la cuenta destino (getAccounts) para afectarlas con el Monto y hacer el update  
   const getAccounts = useSelector(selectAccountsState())
 
-  let cuentaOrigen = getAccounts.find((account)=>account.correoUsuario === usuarioOrigen.correo)
-  //console.log(cuentaOrigen);
-  
-  let cuentaDestino = getAccounts.find((account)=>account.correoUsuario === productoDestino)
-  
-  const onSendMoney = async (e: React.FormEvent<HTMLFormElement>)=>{
+  let cuentaOrigen = getAccounts.find((account) => account.correoUsuario === usuarioOrigen.correo)
+
+  const onSendMoney = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if(productoDestino && monto){
-      
-    }else{
-      alert('Los cambos de Producto Destino y Monto deben contener información')
+    if (productoDestino && monto && (monto <= cuentaOrigen?.monto!)) {
+      //debo crear la transaccion siempre y cuando el correo a enviar exista en la base de datos
+      let cuentaDestino = getAccounts.find((account) => account.correoUsuario === productoDestino)
+
+
+      if (cuentaDestino) {
+        //se crea el objeto transaction
+        const newTransaction: transactionType = {
+          id: nanoid(),
+          fecha: moment(new Date()).format("DD/MM/YYYY HH:mm:ss"),
+          correoOrigen: usuarioOrigen.correo!,
+          correoDestino: cuentaDestino?.correoUsuario,
+          valor: monto
+        }
+        //se crea la transaccion
+        dispatch(createTransaction(newTransaction))
+        alert('se ha generado la transaccion')
+
+        //actualizar la cuenta de cada usuario (crear cada objeto y hacer el dispatch)
+        const cuentaOrigenUpdated: accountType = {
+          id: cuentaOrigen?.id,
+          correoUsuario: cuentaOrigen?.correoUsuario,
+          monto: cuentaOrigen?.monto! - monto
+        }
+
+        const cuentaDestinoUpdated: accountType = {
+          id: cuentaDestino.id,
+          correoUsuario: cuentaDestino.correoUsuario,
+          monto: cuentaDestino.monto! + monto
+        }
+
+        dispatch(updateAccount(cuentaOrigenUpdated))
+        dispatch(updateAccount(cuentaDestinoUpdated))
+        
+        setProductoDestino('')
+        setMonto(0)
+
+        
+        //navegar a Perfil
+        navigate('/perfil')
+      } else {
+        alert('El usuario al que se le envia la informacion no existe en la base de datos')
+        setProductoDestino('')
+      }
+    } else {
+      alert('Los campos de Producto Destino y Monto deben contener información o el monto ingresado excede a la cantidad que tienes en tu cuenta')
+      setProductoDestino('')
+      setMonto(0)
     }
   }
 
   return (
     <div>
-        Formulario para enviar dinero con el que creo la transaccion
-        <form>
-          <div>
-            <label>Producto de Origen</label>
-            <input disabled type='text' value={usuarioOrigen.correo!}></input>
-          </div>
-          <br/>
-          <div>
-            <label>Producto Destino</label>
-            <input onChange={(e)=> setProductoDestino(e.target.value)} type='text' value={productoDestino} placeholder='Correo destino'></input>
-          </div>
-          <br/>
-          <div>
-            <label>Monto a Enviar</label>
-            <input onChange={(e)=> setMonto(Number(e.target.value))} type='number' min='0' value={monto}></input>
-          </div>
-          <br/>
-          <input type='submit' value='Enviar dinero'/>
-        </form>
+      <h1>FORMULARIO DE TRASFERENCIA</h1>
+      <form onSubmit={(e)=>onSendMoney(e)}>
+        <div>
+          <label>Producto de Origen</label>
+          <input disabled type='text' style={{'backgroundColor':'#DAD7D7'}} value={usuarioOrigen.correo!}></input>
+        </div>
+        <br />
+        <div>
+          <label>Saldo en cuenta</label>
+          <input disabled type='text' style={{'backgroundColor':'#DAD7D7'}} value={cuentaOrigen?.monto}></input>
+        </div>
+        <br />
+
+        <div>
+          <label>Producto Destino</label>
+          <input onChange={(e) => setProductoDestino(e.target.value)} type='text' value={productoDestino} placeholder='Correo destino'></input>
+        </div>
+        <br />
+        <div>
+          <label>Monto a Enviar</label>
+          <input onChange={(e) => setMonto(Number(e.target.value))} type='number' min='0' value={monto}></input>
+        </div>
+        <br />
+        <input type='submit' value='Enviar dinero' />
+      </form>
     </div>
   )
 };

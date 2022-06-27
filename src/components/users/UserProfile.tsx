@@ -34,6 +34,7 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
             <td>Nombre</td>
             <td>Rol</td>
             <td>Correo</td>
+            <td>Saldo en Cuenta</td>
           </tr>
         </thead>
         {<User key={realUser?.id} props={realUser} />}

@@ -32,7 +32,7 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
   }, [dispatch])
   
   
-  const userToChangeVerify = getUsers.filter((user) => user.correo===email && user.contraseña===password)[0] 
+  const userToChangeVerify = getUsers.filter((user) => user.correo===email)[0] 
   //console.log(userToChangeVerify);  
 
   const { emailState } = useSelector((state: RootState) => state.logged)
@@ -68,7 +68,7 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
               id: userToChangeVerify?.id,
               nombre: userToChangeVerify?.nombre,
               correo: email,
-              contraseña: password,
+              contrasena: password,
               rol: 'colaborador',
               estaActivo: false,
               correoVerificado: result.user.emailVerified

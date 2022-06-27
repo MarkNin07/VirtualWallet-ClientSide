@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { createTransaction } from "../../actions/transactions/createTransaction"
+import { getAllTransactions } from "../../actions/transactions/getAllTransactions"
 import { RootState } from "../../store"
 import { posibleStatus } from "./userSlice"
 
@@ -12,7 +13,7 @@ type transactionType = {
 }
 
 interface initialStateTransactionsType {
-    transactions: initialStateTransactionsType[]
+    transactions: transactionType[]
     status: posibleStatus
     error: string | null
 }
@@ -24,12 +25,25 @@ const initialState: initialStateTransactionsType ={
 }
 
 const transactionSlice = createSlice({
-    name:'transactions',
+    name:'transacciones',
     initialState,
     reducers:{
 
     },
     extraReducers: (builder) =>{
+        //getAllUsers
+        builder.addCase(getAllTransactions.pending,(state)=>{
+            state.status = posibleStatus.PENDING
+        })
+        builder.addCase(getAllTransactions.fulfilled,(state,action)=>{
+            state.status = posibleStatus.COMPLETED
+            state.transactions = action.payload
+        })
+        builder.addCase(getAllTransactions.rejected, (state)=>{
+            state.status = posibleStatus.FAILED
+            state.error = "Ocurrio algún error mientras se solicitaba la información"
+            state.transactions = []
+        })
         //post create transaction
         builder.addCase(createTransaction.pending,(state)=>{
             state.status = posibleStatus.PENDING

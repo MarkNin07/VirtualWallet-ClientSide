@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { createAccount } from "../../actions/account/createAccount"
-import { getAllAccounts } from "../../actions/account/getAllAccounts"
+import { getAllAccountsFinal } from "../../actions/account/getAllAccounts"
 import { updateAccount } from "../../actions/account/updateAccount"
 import { RootState } from "../../store"
 import { posibleStatus } from "./userSlice"
@@ -32,14 +32,14 @@ const accountSlice = createSlice({
     },
     extraReducers: (builder)=>{
         //GET account
-        builder.addCase(getAllAccounts.pending,(state)=>{
+        builder.addCase(getAllAccountsFinal.pending,(state)=>{
             state.status = posibleStatus.PENDING
         })
-        builder.addCase(getAllAccounts.fulfilled,(state,action)=>{
+        builder.addCase(getAllAccountsFinal.fulfilled,(state,action)=>{
             state.status = posibleStatus.COMPLETED
             state.accounts = action.payload
         })
-        builder.addCase(getAllAccounts.rejected,(state)=>{
+        builder.addCase(getAllAccountsFinal.rejected,(state)=>{
             state.status = posibleStatus.FAILED
             state.error = "Ocurrio algún error mientras se solicitaba la información"
             state.accounts = []

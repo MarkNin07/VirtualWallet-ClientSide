@@ -6,8 +6,6 @@ import verifiedInReducer from './state/slice/verifiedSlice'
 import accountReducer from './state/slice/accountSlice'
 import transactionReducer from './state/slice/transactionSlice'
 
-
-
 const store = configureStore({
     reducer:{
         users: usuarioReducer,

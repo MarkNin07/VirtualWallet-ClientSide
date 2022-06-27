@@ -1,8 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { userType } from "../../state/slice/userSlice";
 
-
-//mock API
 const getUsersUrl = 'http://localhost:8080/getall/users'
 
 export const getAllUsers = createAsyncThunk('getAllUsers', async () => {

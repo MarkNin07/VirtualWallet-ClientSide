@@ -33,13 +33,8 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
   
   
   const userToChangeVerify = getUsers.filter((user) => user.correo===email)[0] 
-  //console.log(userToChangeVerify);  
 
   const { emailState } = useSelector((state: RootState) => state.logged)
-
-  //trae el string del email
-  //console.log("email de state",emailState)
-
 
   useEffect(() => {
     if (emailState === null) {
@@ -63,7 +58,6 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
             const email = result.user.email
             dispatch(logInInReducer(email))
 
-            //nuevo objeto de ese usuario con estado de correo verificado
             const updatedUser: userType={
               id: userToChangeVerify?.id,
               nombre: userToChangeVerify?.nombre,

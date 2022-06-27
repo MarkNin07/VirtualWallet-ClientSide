@@ -4,7 +4,6 @@ const initialState={
     emailVerifiedState:false,
 }
 
-
 const verifiedInSlice = createSlice({
     name:'verified',
     initialState,

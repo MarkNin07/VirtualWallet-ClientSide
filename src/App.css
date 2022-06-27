@@ -216,3 +216,14 @@ textarea {
   margin-top: -20px;
   text-align: right;
 }
+
+.display {
+  display: flex;
+  flex-direction: row;
+    align-items: center;
+    justify-content: center
+}
+
+.separacion {
+  margin: 15px;
+}

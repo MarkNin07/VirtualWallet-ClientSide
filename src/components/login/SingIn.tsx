@@ -42,7 +42,6 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
             if (getUsers.find(user => user.correo === email)) {
                 alert("El correo ingresado ya existe en la base de datos, por favor ingresa otro.")
             } else {
-                //dispatch para crear el usuario al registrarse
                 const newUser: userType = {
                     id: nanoid(),
                     nombre: name,
@@ -54,7 +53,6 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                 }
                 dispatch(createUser(newUser))
 
-                //dispatch para crear la cuenta asociada a ese usuario
                 const newAccount: accountType ={
                     id:nanoid(),
                     correoUsuario: email,
@@ -125,9 +123,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                 </div>
 
                 <br />
-
-
-
+                
                 <button className='button button-block' onClick={(e) => signInForm(e)}>Registrarse</button>
 
             </form>

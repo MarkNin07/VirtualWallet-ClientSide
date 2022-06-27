@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { userType } from "../../state/slice/userSlice";
 
-
 const updateUserUrl = 'http://localhost:8080/put/user'
 
 export const updateUser = createAsyncThunk('updateUser', async(user:userType)=>{

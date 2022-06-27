@@ -12,10 +12,7 @@ const VerifyEmail: React.FunctionComponent<IVerifyEmailProps> = (props) => {
         <h1>
         Por favor verfica tu cuenta. Revisa tu bandeja de entrada o Spam por favor.
         </h1>
-        <Link to= '/'> <button className='button button-block'> Regresar </button></Link>
-        <div>
-      
-        </div>
+        <Link to= '/'> <button className='button button-block'> Regresar </button></Link>        
     </div>
   )
 };

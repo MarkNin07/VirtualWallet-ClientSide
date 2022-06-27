@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { accountType } from "../../state/slice/accountSlice";
 
-//cambiar por el endpoint correcto
 const getAccountssUrl = 'http://localhost:8080/get/all/cuentas'
 
 export const getAllAccountsFinal = createAsyncThunk('getAllAccounts', async () => {

@@ -11,7 +11,6 @@ type accountType = {
     monto: number | undefined
 }
 
-
 interface initialStateAccountType {
     accounts: accountType[]
     status: posibleStatus

@@ -28,7 +28,8 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
   return (
     <div>
       <h1>Tu Perfil</h1>
-      <table>
+      <div className='display'>
+      <table >
         <thead>
           <tr>
             <td>Nombre</td>
@@ -39,9 +40,14 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
         </thead>
         {<User key={realUser?.id} props={realUser} />}
       </table>
+      </div>
       <br />
-      <div>
-        <button>Ver Movimientos</button>
+      <div className='display'>
+        <button className='separacion'>Ver Movimientos</button>
+      
+        <button className='separacion'>Ver Ingresos</button>
+      
+        <button className='separacion'>Ver Egresos</button>
       </div>
     </div>
   )

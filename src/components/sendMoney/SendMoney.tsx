@@ -1,7 +1,7 @@
 import { nanoid } from '@reduxjs/toolkit';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getAllAccountsFinal } from '../../actions/account/getAllAccounts';
 import { getAllUsers } from '../../actions/user/getAllUsers';
 import { accountType, selectAccountsState, selectAccountsStatus } from '../../state/slice/accountSlice';
@@ -21,7 +21,6 @@ const SendMoney: React.FunctionComponent = (props) => {
   const [productoDestino, setProductoDestino] = useState('')
   const [monto, setMonto] = useState(0)
 
-  //dispatch de getUusarios
   const dispatch = useAppDispatch()
   const statusUsers = useSelector(selectUsersStatus())
 
@@ -31,7 +30,6 @@ const SendMoney: React.FunctionComponent = (props) => {
     }
   }, [dispatch])
 
-  //dispatch de getAccounts
   const statusAccounts = useSelector(selectAccountsStatus())
   useEffect(() => {
     if (statusAccounts === posibleStatus.IDLE) {
@@ -53,13 +51,15 @@ const SendMoney: React.FunctionComponent = (props) => {
 
   const onSendMoney = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (productoDestino && monto && (monto <= cuentaOrigen?.monto!)) {
-      //debo crear la transaccion siempre y cuando el correo a enviar exista en la base de datos
+    if (productoDestino && monto && (monto <= cuentaOrigen?.monto!) && productoDestino !== cuentaOrigen?.correoUsuario) {
+
+      if (productoDestino === cuentaOrigen?.correoUsuario) {
+        alert('No puedes enviar dinero a ti mismo desde la misma cuenta')
+      }
+
       let cuentaDestino = getAccounts.find((account) => account.correoUsuario === productoDestino)
 
-
       if (cuentaDestino) {
-        //se crea el objeto transaction
         const newTransaction: transactionType = {
           id: nanoid(),
           fecha: moment(new Date()).format("DD/MM/YYYY HH:mm:ss"),
@@ -67,11 +67,10 @@ const SendMoney: React.FunctionComponent = (props) => {
           correoDestino: cuentaDestino?.correoUsuario,
           valor: monto
         }
-        //se crea la transaccion
+
         dispatch(createTransaction(newTransaction))
         alert('se ha generado la transaccion')
 
-        //actualizar la cuenta de cada usuario (crear cada objeto y hacer el dispatch)
         const cuentaOrigenUpdated: accountType = {
           id: cuentaOrigen?.id,
           correoUsuario: cuentaOrigen?.correoUsuario,
@@ -86,12 +85,10 @@ const SendMoney: React.FunctionComponent = (props) => {
 
         dispatch(updateAccount(cuentaOrigenUpdated))
         dispatch(updateAccount(cuentaDestinoUpdated))
-        
+
         setProductoDestino('')
         setMonto(0)
-
         
-        //navegar a Perfil
         navigate('/perfil')
       } else {
         alert('El usuario al que se le envia la informacion no existe en la base de datos')
@@ -107,15 +104,15 @@ const SendMoney: React.FunctionComponent = (props) => {
   return (
     <div>
       <h1>FORMULARIO DE TRASFERENCIA</h1>
-      <form onSubmit={(e)=>onSendMoney(e)}>
+      <form onSubmit={(e) => onSendMoney(e)}>
         <div>
           <label>Producto de Origen</label>
-          <input disabled type='text' style={{'backgroundColor':'#DAD7D7'}} value={usuarioOrigen.correo!}></input>
+          <input disabled type='text' style={{ 'backgroundColor': '#DAD7D7' }} value={usuarioOrigen.correo!}></input>
         </div>
         <br />
         <div>
           <label>Saldo en cuenta</label>
-          <input disabled type='text' style={{'backgroundColor':'#DAD7D7'}} value={cuentaOrigen?.monto}></input>
+          <input disabled type='text' style={{ 'backgroundColor': '#DAD7D7' }} value={cuentaOrigen?.monto}></input>
         </div>
         <br />
 
@@ -129,8 +126,12 @@ const SendMoney: React.FunctionComponent = (props) => {
           <input onChange={(e) => setMonto(Number(e.target.value))} type='number' min='0' value={monto}></input>
         </div>
         <br />
-        <input type='submit' value='Enviar dinero' />
+        <input type='submit' value='Enviar Dinero' style={{ 'backgroundColor': '#E5E5E5' }} />
       </form>
+      <br />
+      <Link to='/perfil'>
+        <button>Regresar</button>
+      </Link>
     </div>
   )
 };

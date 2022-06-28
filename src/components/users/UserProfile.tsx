@@ -43,11 +43,17 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
       </div>
       <br />
       <div className='display'>
+        <Link to='/movimientos' state={{userSend: realUser?.correo}}>
         <button className='separacion'>Ver Movimientos</button>
-      
+        </Link>
+
+        <Link to='/ingresos' state={{userSend: realUser?.correo}}>
         <button className='separacion'>Ver Ingresos</button>
-      
+        </Link>
+
+        <Link to='/egresos' state={{userSend: realUser?.correo}}>
         <button className='separacion'>Ver Egresos</button>
+        </Link>
       </div>
     </div>
   )

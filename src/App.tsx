@@ -8,6 +8,9 @@ import SendMoney from './components/sendMoney/SendMoney'
 import { useSelector } from 'react-redux'
 import { RootState } from './store'
 import VerifyEmail from './components/login/VerifyEmail'
+import AllMovements from './components/movements/AllMovements'
+import Income from './components/movements/Income'
+import Expenses from './components/movements/Expenses'
 
 function App() {
   const { emailState } = useSelector((state: RootState) => state.logged)
@@ -31,6 +34,10 @@ function App() {
           <Route path='perfil' element={<UserProfile />} />
           <Route path='sendMoney' element={<SendMoney />} />
           <Route path='verifyEmail' element={<VerifyEmail />} />
+
+          <Route path='movimientos' element={<AllMovements />} />
+          <Route path='ingresos' element={<Income />} />
+          <Route path='egresos' element={<Expenses />} />
           <Route path='/' />
         </Routes>
       </BrowserRouter>

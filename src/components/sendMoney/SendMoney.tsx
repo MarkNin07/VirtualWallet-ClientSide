@@ -103,7 +103,7 @@ const SendMoney: React.FunctionComponent = (props) => {
 
   return (
     <div>
-      <h1>FORMULARIO DE TRASFERENCIA</h1>
+      <h1>FORMULARIO DE TRANSFERENCIA</h1>
       <form onSubmit={(e) => onSendMoney(e)}>
         <div>
           <label>Producto de Origen</label>

@@ -64,6 +64,6 @@ export type {initialStateTransactionsType}
 export default transactionSlice.reducer
 
 //extra reducers
-export const selectTransactionsState = () => (state:RootState) => state.accounts.accounts
-export const selectTransactionsStatus = () => (state:RootState) => state.accounts.status
-export const selectTransactionsFetchError = () => (state:RootState) => state.accounts.error
+export const selectTransactionsState = () => (state:RootState) => state.transactions.transactions
+export const selectTransactionsStatus = () => (state:RootState) => state.transactions.status
+export const selectTransactionsFetchError = () => (state:RootState) => state.transactions.error

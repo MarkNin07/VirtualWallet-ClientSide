@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { transactionType } from "../../state/slice/transactionSlice";
 
-const createTransactionUrl = 'http://localhost:8080/createTransaccion'
+const createTransactionUrl = 'https://virtualwalletproject.herokuapp.com/createTransaccion'
 
 export const createTransaction = createAsyncThunk('createTransaction', async(transaction:transactionType)=>{
     const response = await fetch(createTransactionUrl,{

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { userType } from '../../state/slice/userSlice'
 
-const createUserUrl = 'http://localhost:8080/post/user' 
+const createUserUrl = 'https://virtualwalletproject.herokuapp.com/post/user' 
 
 export const createUser = createAsyncThunk('createUser', async(user:userType)=>{
     const response = await fetch(createUserUrl,{

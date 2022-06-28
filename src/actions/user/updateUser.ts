@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { userType } from "../../state/slice/userSlice";
 
-const updateUserUrl = 'http://localhost:8080/put/user'
+const updateUserUrl = 'https://virtualwalletproject.herokuapp.com/put/user'
 
 export const updateUser = createAsyncThunk('updateUser', async(user:userType)=>{
     const response = await fetch(updateUserUrl,{

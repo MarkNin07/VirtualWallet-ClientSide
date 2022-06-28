@@ -7,11 +7,16 @@ import { posibleStatus, selectUsersState, selectUsersStatus } from '../../state/
 import { useAppDispatch } from '../../store';
 
 interface userStateSend {
+    userSend: string
 }
 
 const AllMovements: React.FunctionComponent = (props) => {
 
     const dispatch = useAppDispatch()
+
+    const location = useLocation()
+    const state = location.state as userStateSend
+    const { userSend } = state
 
     const statusTransactions = useSelector(selectTransactionsStatus())
     React.useEffect(() => {
@@ -21,6 +26,7 @@ const AllMovements: React.FunctionComponent = (props) => {
     }, [dispatch])
 
     const allTransactions = useSelector(selectTransactionsState())
+    const transaccionWhereIamOriginAndDestination = allTransactions.filter((transaction) => transaction.correoDestino===userSend || transaction.correoOrigen===userSend)
 
     return (
         <div>
@@ -34,7 +40,7 @@ const AllMovements: React.FunctionComponent = (props) => {
                             <td>Fecha</td>
                         </tr>
                     </thead>
-                    {allTransactions.map((transaction) =>{
+                    {transaccionWhereIamOriginAndDestination.map((transaction) => {
                         return <tbody key={transaction.id}>
                             <tr>
                                 <td>{transaction.correoOrigen}</td>

@@ -1,43 +1,43 @@
 import { useState } from 'react'
-import logo from './logo.svg'
 import './App.css'
+import SingIn from './components/login/SingIn'
+import LogIn from './components/login/LogIn'
+import UserProfile from './components/users/UserProfile'
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
+import SendMoney from './components/sendMoney/SendMoney'
+import { useSelector } from 'react-redux'
+import { RootState } from './store'
+import VerifyEmail from './components/login/VerifyEmail'
+import AllMovements from './components/movements/AllMovements'
+import Income from './components/movements/Income'
+import Expenses from './components/movements/Expenses'
+import PagePpal from './components/login/Page'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { emailState } = useSelector((state: RootState) => state.logged)
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+
+      <BrowserRouter>
+        {emailState === null ?
+          <>            
+          </>
+          :
+          <Link to='/perfil'></Link>}
+
+        <Routes>
+          <Route path='perfil' element={<UserProfile />} />
+          <Route path='sendMoney' element={<SendMoney />} />
+          <Route path='verifyEmail' element={<VerifyEmail />} />
+
+          <Route path='movimientos' element={<AllMovements />} />
+          <Route path='ingresos' element={<Income />} />
+          <Route path='egresos' element={<Expenses />} />
+          <Route path='/' element={<PagePpal/>}/>
+        </Routes>
+      </BrowserRouter>
+
     </div>
   )
 }

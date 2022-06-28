@@ -30,14 +30,17 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
         }
       }, [dispatch])
 
+    dispatch(getAllUsers())
+
     const getUsers = useSelector(selectUsersState())
 
     const signInForm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
 
         const regularExpression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]{2}).{8,}$/
+        const reGexName = /([a-zA-ZÀ-ÿ\u00f1\u00d1]{2,})*[\s]{1,1}([a-zA-ZÀ-ÿ\u00f1\u00d1]{2,})/
 
-        if (email && password.match(regularExpression)) {
+        if (email && password.match(regularExpression) && name.match(reGexName)) {
 
             if (getUsers.find(user => user.correo === email)) {
                 alert("El correo ingresado ya existe en la base de datos, por favor ingresa otro.")
@@ -63,7 +66,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                 createUserWithEmailAndPassword(auth, email, password)
                     .then((result) => {
                         sendEmailVerification(result.user)
-                        alert("Se ha enviado un correo de verificación. Revisa tu bandeja de entrada o de correos no deseados")
+                        alert("Se ha enviado un correo de verificación. Revisa tu bandeja de entrada o de correos no deseados" + result.user.email)
                     })
                     .catch((error) => {
                         const errorMessage = error.message

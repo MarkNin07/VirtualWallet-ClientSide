@@ -21,7 +21,7 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const dispatchApp = useAppDispatch()
-  
+
   const status = useSelector(selectUsersStatus())
   const getUsers = useSelector(selectUsersState())
 
@@ -29,10 +29,9 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
     if (status === posibleStatus.IDLE) {
       dispatchApp(getAllUsers())
     }
-  }, [dispatch])
-  
-  
-  const userToChangeVerify = getUsers.filter((user) => user.correo===email)[0] 
+  }, [status, dispatch])
+
+  const userToChangeVerify = getUsers.filter((user) => user.correo === email)[0]
 
   const { emailState } = useSelector((state: RootState) => state.logged)
 
@@ -54,20 +53,34 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
             navigate('/verifyEmail')
           }
 
-          if (result.user.emailVerified) {          
-            const email = result.user.email
-            dispatch(logInInReducer(email))
+          if (result.user.emailVerified) {
+            const actualUser = getUsers.find((user) => user.correo === email)
 
-            const updatedUser: userType={
+            if (actualUser?.estaActivo!) {
+              alert("ya inicio sesión en otro dispositivo")
+              navigate('/')
+              return
+            }
+
+            const adminUser = getUsers.find((user) => user.rol === 'admin')
+            const actualEmail = result.user.email
+            dispatch(logInInReducer(actualEmail))
+
+            if (adminUser?.correo! === actualEmail) {
+              navigate('/payroll')
+              return
+            }
+
+            const updatedUser: userType = {
               id: userToChangeVerify?.id,
               nombre: userToChangeVerify?.nombre,
               correo: email,
               contrasena: password,
               rol: 'colaborador',
-              estaActivo: false,
+              estaActivo: true,
               correoVerificado: result.user.emailVerified
             }
-            dispatchApp(updateUser(updatedUser))           
+            dispatchApp(updateUser(updatedUser))
             navigate('/perfil')
           }
         })

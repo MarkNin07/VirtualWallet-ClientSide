@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from '@reduxjs/toolkit'
 import { createTransaction } from "../../actions/transactions/createTransaction"
 import { getAllTransactions } from "../../actions/transactions/getAllTransactions"
 import { RootState } from "../../store"

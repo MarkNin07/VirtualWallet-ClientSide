@@ -41,7 +41,7 @@ const Income: React.FunctionComponent = (props) => {
             </tr>
           </thead>
           {ingresos.map((ingreso) => {
-            return <tbody>
+            return <tbody key={ingreso.id}>
               <tr>
                 <td>{ingreso.correoOrigen}</td>
                 <td>{ingreso.correoDestino}</td>

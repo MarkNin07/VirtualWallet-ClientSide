@@ -35,7 +35,7 @@ const AllMovements: React.FunctionComponent = (props) => {
                         </tr>
                     </thead>
                     {allTransactions.map((transaction) =>{
-                        return <tbody>
+                        return <tbody key={transaction.id}>
                             <tr>
                                 <td>{transaction.correoOrigen}</td>
                                 <td>{transaction.correoDestino}</td>

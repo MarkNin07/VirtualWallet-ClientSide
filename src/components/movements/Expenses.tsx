@@ -42,7 +42,7 @@ const Expenses: React.FunctionComponent = (props) => {
             </tr>
           </thead>
           {egresos.map((egreso) => {
-            return <tbody>
+            return <tbody key={egreso.id}>
               <tr>
                 <td>{egreso.correoOrigen}</td>
                 <td>{egreso.correoDestino}</td>

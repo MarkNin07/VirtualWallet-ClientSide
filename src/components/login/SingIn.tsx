@@ -30,6 +30,8 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
         }
       }, [dispatch])
 
+    dispatch(getAllUsers())
+
     const getUsers = useSelector(selectUsersState())
 
     const signInForm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -64,7 +66,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                 createUserWithEmailAndPassword(auth, email, password)
                     .then((result) => {
                         sendEmailVerification(result.user)
-                        alert("Se ha enviado un correo de verificación. Revisa tu bandeja de entrada o de correos no deseados")
+                        alert("Se ha enviado un correo de verificación. Revisa tu bandeja de entrada o de correos no deseados" + result.user.email)
                     })
                     .catch((error) => {
                         const errorMessage = error.message

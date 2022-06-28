@@ -1,15 +1,20 @@
 import React, { useEffect } from 'react';
+import { signOut } from 'firebase/auth';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { getAllUsers } from '../../actions/user/getAllUsers';
 import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
 import { RootState, useAppDispatch } from '../../store';
 import User from './User';
+import { auth } from '../../fireabseConfig';
+import { updateUser } from '../../actions/user/updateUser';
 
 interface IUserListProps {
 }
 
 const UserList: React.FunctionComponent<IUserListProps> = (props) => {
+
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -24,6 +29,21 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
   const { emailState } = useSelector((state: RootState) => state.logged)
 
   const realUser: userType | undefined = getUsers.find((user) => user.correo === emailState)
+
+  const closeSession = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      const UserSessionUpdated: userType = { 
+        id: realUser?.id!,
+        nombre: realUser?.nombre!,
+        correo: realUser?.correo!,
+        contrasena: realUser?.contrasena!,
+        rol: realUser?.rol,
+        estaActivo: false,
+        correoVerificado: realUser?.correoVerificado!
+      }
+      dispatch(updateUser(UserSessionUpdated))
+      signOut(auth)
+      navigate('/')
+  }
 
   return (
     <div>
@@ -57,9 +77,7 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
       </div>
 
       <div className='display'>
-      <Link to='/'>
-        <button className='separacion'>Cerrar Sesión</button>
-        </Link>
+        <button onClick={(e) => closeSession(e)} className='separacion'>Cerrar Sesión</button>
       </div>
     </div>
   )

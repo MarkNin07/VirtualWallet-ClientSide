@@ -1,4 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { userType } from "../../state/slice/userSlice";
 
 const updateUserUrl = 'https://virtualwalletproject.herokuapp.com/put/user'

@@ -12,6 +12,7 @@ import AllMovements from './components/movements/AllMovements'
 import Income from './components/movements/Income'
 import Expenses from './components/movements/Expenses'
 import PagePpal from './components/login/Page'
+import Payroll from './components/payroll/Payroll'
 
 function App() {
   const { emailState } = useSelector((state: RootState) => state.logged)
@@ -34,6 +35,7 @@ function App() {
           <Route path='movimientos' element={<AllMovements />} />
           <Route path='ingresos' element={<Income />} />
           <Route path='egresos' element={<Expenses />} />
+          <Route path='payroll' element={<Payroll />} />
           <Route path='/' element={<PagePpal/>}/>
         </Routes>
       </BrowserRouter>

@@ -1,10 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit"; 
+import { configureStore } from '@reduxjs/toolkit'; 
 import { useDispatch } from 'react-redux'
 import usuarioReducer from './state/slice/userSlice'
 import loggedInReducer from './state/slice/loggedInSlice'
 import verifiedInReducer from './state/slice/verifiedSlice'
 import accountReducer from './state/slice/accountSlice'
 import transactionReducer from './state/slice/transactionSlice'
+import payrollReducer from './state/slice/payrollSlice'
 
 const store = configureStore({
     reducer:{
@@ -12,7 +13,8 @@ const store = configureStore({
         logged: loggedInReducer,
         verified: verifiedInReducer,
         accounts: accountReducer,
-        transactions: transactionReducer
+        transactions: transactionReducer,
+        payroll: payrollReducer
     }
 })
 

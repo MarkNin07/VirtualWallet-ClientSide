@@ -1,4 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { transactionType } from "../../state/slice/transactionSlice";
 
 const createTransactionUrl = 'https://virtualwalletproject.herokuapp.com/createTransaccion'

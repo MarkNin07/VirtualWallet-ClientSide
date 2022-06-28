@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from '@reduxjs/toolkit'
 import { createAccount } from "../../actions/account/createAccount"
 import { getAllAccountsFinal } from "../../actions/account/getAllAccounts"
 import { updateAccount } from "../../actions/account/updateAccount"

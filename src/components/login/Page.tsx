@@ -9,7 +9,6 @@ interface IPagePpalProps {
 const PagePpal: React.FunctionComponent<IPagePpalProps> = (props) => {
   return (
     <div>
-        <SingIn/>
         <LogIn/>        
     </div>
   )

@@ -8,13 +8,27 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mantine/core": "^4.2.11",
+    "@mantine/dates": "^4.2.11",
+    "@mantine/dropzone": "^4.2.11",
+    "@mantine/form": "^4.2.11",
+    "@mantine/hooks": "^4.2.11",
+    "@mantine/modals": "^4.2.11",
+    "@mantine/next": "^4.2.11",
+    "@mantine/notifications": "^4.2.11",
+    "@mantine/prism": "^4.2.11",
+    "@mantine/rte": "^4.2.11",
+    "@mantine/spotlight": "^4.2.11",
     "@reduxjs/toolkit": "^1.8.2",
+    "dayjs": "^1.11.3",
     "firebase": "^9.8.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-moment": "^1.1.2",
     "react-redux": "^8.0.2",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "tabler-icons-react": "^1.51.0",
+    "tailwindcss": "^3.1.4"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

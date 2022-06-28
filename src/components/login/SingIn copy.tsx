@@ -11,8 +11,6 @@ import { useSelector } from 'react-redux';
 import { accountType } from '../../state/slice/accountSlice';
 import { createAccount } from '../../actions/account/createAccount';
 import { getAllUsers } from '../../actions/user/getAllUsers';
-import { At } from 'tabler-icons-react';
-import { Modal,Container, Button, Group, PasswordInput, TextInput, Input } from '@mantine/core';
 
 interface ISingInProps {
 }
@@ -88,50 +86,48 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
     }
 
     return (
+        <div>
+            <h1>Registrarse</h1>
+            <form>
 
-<>
-        <Container size="xs" px="xs" my='xs'>
-            <form onSubmit={(e:any) => signInForm(e.target.value)}>
-                <Group position='left' my='xs'>
-                    <TextInput
-                        placeholder="Your name"
-                        label="Name"
-                        required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
+                <div className='field-wrap'>
+                    <label htmlFor="">Nombre Completo</label>
+                    <input onChange={(e) => setName(e.target.value)}
+                        type="text"
+                        name="nombre"
+                        placeholder='Ex. Juan David Guitierrez Mesa'
+                        value={name} />
+                </div>
 
-                </Group>
+                <br />
 
-                <Group position='left'>
-                <Input
-                            onChange={(e:any) => setEmail(e.target.value)}
-                            icon={<At />}
-                            variant="filled"
-                            placeholder="Your email"
-                            radius="md"
-                            value={email}
-                            />
-                </Group>
-                <Group position='left' my='xs'>
-                <PasswordInput 
-                            onChange={(e) => setPassword(e.target.value)}
-                            value={password}
-                            placeholder="Password"
-                            description="La contraseña debe contener al menos 8 caracteres, minúscula, mayúscula, números y 2 caracteres especiales"
-                            variant="filled"
-                            radius="md"
-                            required
-                          />
-                </Group>
-                            <button role="button" 
-                            className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full">
-                              Regístrese
-                              </button>
+                <div>
+                    <label htmlFor="username">Email</label>
+                    <input
+                        onChange={(e) => setEmail(e.target.value)}
+                        type='email'
+                        name='Email'
+                        placeholder='Ex. bbeed8@amazon.de'
+                        value={email} />
+                </div>
+
+                <br />
+
+                <div>
+                    <label htmlFor="password">Contraseña</label>
+                    <input onChange={(e) => setPassword(e.target.value)}
+                        type="password"
+                        name="contraseña"
+                        placeholder="Al menos 2 caracteres especiales"
+                        value={password} />
+                </div>
+
+                <br />
+                
+                <button className='button button-block' onClick={(e) => signInForm(e)}>Registrarse</button>
+
             </form>
-        </Container>
-    </>
-
+        </div>
     )
 };
 

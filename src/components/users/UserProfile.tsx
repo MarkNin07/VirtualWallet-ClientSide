@@ -55,6 +55,12 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
         <button className='separacion'>Ver Egresos</button>
         </Link>
       </div>
+
+      <div className='display'>
+      <Link to='/'>
+        <button className='separacion'>Cerrar Sesión</button>
+        </Link>
+      </div>
     </div>
   )
 };

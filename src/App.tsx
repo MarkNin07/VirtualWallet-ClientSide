@@ -11,6 +11,7 @@ import VerifyEmail from './components/login/VerifyEmail'
 import AllMovements from './components/movements/AllMovements'
 import Income from './components/movements/Income'
 import Expenses from './components/movements/Expenses'
+import PagePpal from './components/login/Page'
 
 function App() {
   const { emailState } = useSelector((state: RootState) => state.logged)
@@ -20,13 +21,8 @@ function App() {
 
       <BrowserRouter>
         {emailState === null ?
-          <div>
-            <SingIn />
-            <br />
-            <br />
-            <br />
-            <LogIn />
-          </div>
+          <>            
+          </>
           :
           <Link to='/perfil'></Link>}
 
@@ -38,7 +34,7 @@ function App() {
           <Route path='movimientos' element={<AllMovements />} />
           <Route path='ingresos' element={<Income />} />
           <Route path='egresos' element={<Expenses />} />
-          <Route path='/' />
+          <Route path='/' element={<PagePpal/>}/>
         </Routes>
       </BrowserRouter>
 

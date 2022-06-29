@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { sendEmailVerification, signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -51,6 +51,8 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
           if (!result.user.emailVerified) {
             const verified = result.user.emailVerified
             dispatch(verifiedInInReducer(verified))
+            sendEmailVerification(result.user) //debe enviar un nuevo correo
+            alert('Se ha enviado un nuevo correo de verificación')
             navigate('/verifyEmail')
           }
 

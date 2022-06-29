@@ -28,9 +28,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
         if (status === posibleStatus.IDLE) {
             dispatch(getAllUsers())
         }
-      }, [dispatch])
-
-    dispatch(getAllUsers())
+      }, [dispatch])  
 
     const getUsers = useSelector(selectUsersState())
 

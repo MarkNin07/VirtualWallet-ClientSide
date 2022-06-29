@@ -29,7 +29,7 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
     if (status === posibleStatus.IDLE) {
       dispatchApp(getAllUsers())
     }
-  }, [status, dispatch])
+  }, [dispatch])
 
   const userToChangeVerify = getUsers.filter((user) => user.correo === email)[0]
 
@@ -63,7 +63,9 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
             }
 
             const adminUser = getUsers.find((user) => user.rol === 'admin')
+                        
             const actualEmail = result.user.email
+                        
             dispatch(logInInReducer(actualEmail))
 
             if (adminUser?.correo! === actualEmail) {

@@ -88,9 +88,16 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
             setPassword('')
             setName('')
         } else {
-            alert("Ambos campos deben estar con información valida. La contraseña debe contar con al menos: Una letra en mayúscula, Una letra en minúscula, Un dígito, Dos caracteres especiales, y al menos ocho caracteres. El nombre de contener al menos 2 palabras")
+            if(!name.match(nameRegularExpresion)){
+                alert('El nombre no debe contener caracteres especiales ni numeros. Se debe tener mínimo un nombre de dos letras para realizar el registro')
+            }
+            if(!password.match(regularExpression)){
+                alert('La contraseña debe contar con al menos: Una letra en mayúscula, Una letra en minúscula, Un dígito, Un caracter especiales, y al menos ocho caracteres.')
+            }
+            if(!email || !password || !name){
+                alert("Todos los campos deben tener información.")
+            }
         }
-
     }
 
     return (

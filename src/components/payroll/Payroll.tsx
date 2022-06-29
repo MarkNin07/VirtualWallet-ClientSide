@@ -3,7 +3,7 @@ import { account } from '../../state/slice/payrollSlice';
 import * as XLSX from 'xlsx';
 import { Alert, Button, Form, Stack, Table } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { posibleStatus, selectUsersFetchError, selectUsersState, selectUsersStatus } from '../../state/slice/userSlice';
+import { posibleStatus, selectUsersFetchError, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
 import { getAllUsers } from '../../actions/user/getAllUsers';
 import './Payroll.css'
 import { selectAccountsFetchError, selectAccountsState, selectAccountsStatus } from '../../state/slice/accountSlice';
@@ -16,18 +16,24 @@ import { createAccount } from '../../actions/account/createAccount';
 import moment from 'moment';
 import { nanoid } from '@reduxjs/toolkit';
 import Swal from 'sweetalert2';
+import { RootState } from '../../store';
+import { updateUser } from '../../actions/user/updateUser';
+import { auth } from '../../fireabseConfig';
+import { signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 interface IUserProps {
 }
 
 interface excelData {
-    ID: string 
+    ID: string
     Monto: number
 }
 
 const PayRoll: FunctionComponent<IUserProps> = (props) => {
 
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const usersLists = useAppSelector(selectUsersState());
     const usersStatus = useAppSelector(selectUsersStatus());
@@ -64,6 +70,10 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
     const [showError, setShowError] = useState<boolean>(false);
     const [showTable, setShowTable] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
+
+    const { emailState } = useAppSelector((state: RootState) => state.logged)
+
+    const realUser: userType | undefined = usersLists.find((user) => user.correo === emailState)
 
     const readExcel = (file: any) => {
         setShowError(false);
@@ -241,11 +251,23 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
             confirmButtonText: 'Si'
         }).then((result) => {
             if (result.isConfirmed) {
+                const UserSessionUpdated: userType = {
+                    id: realUser?.id!,
+                    nombre: realUser?.nombre!,
+                    correo: realUser?.correo!,
+                    contrasena: realUser?.contrasena!,
+                    rol: realUser?.rol,
+                    estaActivo: false,
+                    correoVerificado: realUser?.correoVerificado!
+                }
+                dispatch(updateUser(UserSessionUpdated))
+                signOut(auth)
                 Swal.fire({
                     title: 'Gracias!',
                     text: 'Ha salido del aplicativo',
                     icon: 'success'
                 })
+                navigate('/')
             }
         })
 
@@ -291,7 +313,6 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
                     >Descargar Plantilla para Pago de Nómina</Button>
                 </div>
                 <Form.Group controlId="formFileLg" className="mb-3">
-                    <Form.Label style={{ marginLeft: '1rem' }}>Por favor, seleccione el archivo de pago de nómina en formato excel:</Form.Label>
                     <Form.Control
                         className='file-input'
                         type="file"

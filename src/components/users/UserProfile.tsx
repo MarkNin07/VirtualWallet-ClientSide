@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { useSelector } from 'react-redux';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
@@ -8,11 +8,21 @@ import { RootState, useAppDispatch } from '../../store';
 import User from './User';
 import { auth } from '../../fireabseConfig';
 import { updateUser } from '../../actions/user/updateUser';
+import { AppShell, Navbar, Header, Footer, Aside, Text, MediaQuery, Burger, useMantineTheme, } from '@mantine/core';
+import ShellNavbar from './navlinks/ShellNavbar';
+import ShellAside from './navlinks/ShellAside';
+import ShellFooter from './navlinks/ShellFooter';
+import ShellHeader from './navlinks/ShellHeader';
+
 
 interface IUserListProps {
 }
 
 const UserList: React.FunctionComponent<IUserListProps> = (props) => {
+
+  const theme = useMantineTheme();
+  const [opened, setOpened] = useState(false);
+  const main = { background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[1], }
 
   const navigate = useNavigate();
 
@@ -31,56 +41,39 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
   const realUser: userType | undefined = getUsers.find((user) => user.correo === emailState)
 
   const closeSession = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      const UserSessionUpdated: userType = { 
-        id: realUser?.id!,
-        nombre: realUser?.nombre!,
-        correo: realUser?.correo!,
-        contrasena: realUser?.contrasena!,
-        rol: realUser?.rol,
-        estaActivo: false,
-        correoVerificado: realUser?.correoVerificado!
-      }
-      dispatch(updateUser(UserSessionUpdated))
-      signOut(auth)
-      navigate('/')
+    const UserSessionUpdated: userType = {
+      id: realUser?.id!,
+      nombre: realUser?.nombre!,
+      correo: realUser?.correo!,
+      contrasena: realUser?.contrasena!,
+      rol: realUser?.rol,
+      estaActivo: false,
+      correoVerificado: realUser?.correoVerificado!
+    }
+    dispatch(updateUser(UserSessionUpdated))
+    signOut(auth)
+    navigate('/')
+
+
   }
 
+
   return (
-    <div>
-      <h1>Tu Perfil</h1>
-      <div className='display'>
-      <table >
-        <thead>
-          <tr>
-            <td>Nombre</td>
-            <td>Rol</td>
-            <td>Correo</td>
-            <td>Saldo en Cuenta</td>
-          </tr>
-        </thead>
-        {<User key={realUser?.id} props={realUser} />}
-      </table>
-      </div>
-      <br />
-      <div className='display'>
-        <Link to='/movimientos' state={{userSend: realUser?.correo}}>
-        <button className='separacion'>Ver Movimientos</button>
-        </Link>
 
-        <Link to='/ingresos' state={{userSend: realUser?.correo}}>
-        <button className='separacion'>Ver Ingresos</button>
-        </Link>
+    <AppShell
+      styles={{ main }}
+      navbarOffsetBreakpoint="sm"
+      asideOffsetBreakpoint="sm"
+      fixed
+      navbar={<ShellNavbar opened={opened} />}
+      aside={<ShellAside />}
+      footer={<ShellFooter />}
+      header={<ShellHeader opened={opened} setOpened={setOpened} />}
+    >
 
-        <Link to='/egresos' state={{userSend: realUser?.correo}}>
-        <button className='separacion'>Ver Egresos</button>
-        </Link>
-      </div>
+    </AppShell>
+  );
 
-      <div className='display'>
-        <button onClick={(e) => closeSession(e)} className='separacion'>Cerrar Sesión</button>
-      </div>
-    </div>
-  )
-};
+}
 
 export default UserList;

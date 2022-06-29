@@ -1,46 +1,26 @@
 import { useState } from 'react'
-import './App.css'
-import SingIn from './components/login/SingIn'
-import LogIn from './components/login/LogIn'
-import UserProfile from './components/users/UserProfile'
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
-import SendMoney from './components/sendMoney/SendMoney'
-import { useSelector } from 'react-redux'
-import { RootState } from './store'
-import VerifyEmail from './components/login/VerifyEmail'
-import AllMovements from './components/movements/AllMovements'
-import Income from './components/movements/Income'
-import Expenses from './components/movements/Expenses'
-import PagePpal from './components/login/Page'
-import Payroll from './components/payroll/Payroll'
+import {ColorScheme, ColorSchemeProvider, MantineProvider} from "@mantine/core";
+import {useHotkeys, useLocalStorage} from "@mantine/hooks";
+import AppRoutes from "./AppRoutes";
 
 function App() {
-  const { emailState } = useSelector((state: RootState) => state.logged)
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: 'mantine-color-scheme',
+    defaultValue: 'light',
+    getInitialValueInEffect: true,
+  });
+
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
+  useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
   return (
-    <div className="App">
-
-      <BrowserRouter>
-        {emailState === null ?
-          <>            
-          </>
-          :
-          <Link to='/perfil'></Link>}
-
-        <Routes>
-          <Route path='perfil' element={<UserProfile />} />
-          <Route path='sendMoney' element={<SendMoney />} />
-          <Route path='verifyEmail' element={<VerifyEmail />} />
-
-          <Route path='movimientos' element={<AllMovements />} />
-          <Route path='ingresos' element={<Income />} />
-          <Route path='egresos' element={<Expenses />} />
-          <Route path='payroll' element={<Payroll />} />
-          <Route path='/' element={<PagePpal/>}/>
-        </Routes>
-      </BrowserRouter>
-
-    </div>
+    <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+      <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+        <AppRoutes />
+      </MantineProvider>
+    </ColorSchemeProvider>
   )
 }
 

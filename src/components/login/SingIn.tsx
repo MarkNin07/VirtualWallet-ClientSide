@@ -92,7 +92,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                 alert('El nombre no debe contener caracteres especiales ni numeros. Se debe tener mínimo un nombre de dos letras para realizar el registro')
             }
             if(!password.match(regularExpression)){
-                alert('La contraseña debe contar con al menos: Una letra en mayúscula, Una letra en minúscula, Un dígito, Un caracter especiales, y al menos ocho caracteres.')
+                alert("La contraseña debe contener al menos 8 caracteres, minúscula, mayúscula, al menos un número y al menos un caracter especial")
             }
             if(!email || !password || !name){
                 alert("Todos los campos deben tener información.")
@@ -133,7 +133,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                             className="w-full"
                             value={password}
                             placeholder="Password"
-                            description="La contraseña debe contener al menos 8 caracteres, minúscula, mayúscula, números y 2 caracteres especiales"
+                            description="La contraseña debe contener al menos 8 caracteres, minúscula, mayúscula, al menos un número y al menos un caracter especial"
                             variant="filled"
                             radius="md"
                             required

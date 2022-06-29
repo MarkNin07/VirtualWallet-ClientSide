@@ -155,7 +155,7 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
               onChange={(e: any) => setPassword(e.target.value)}
               value={password}
               placeholder="Password"
-              description="La contraseña debe contener al menos 8 caracteres, minúscula, mayúscula, números y 2 caracteres especiales"
+              description="La contraseña debe contener al menos 8 caracteres, minúscula, mayúscula, al menos un número y al menos un caracter especial"
               variant="filled"
               radius="md"
               required

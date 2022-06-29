@@ -38,10 +38,10 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
     const signInForm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
 
-        const regularExpression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]{2}).{8,}$/
-        const nameRegularExpression = /([a-zA-ZÀ-ÿ\u00f1\u00d1]{2,})*[\s]{1,1}([a-zA-ZÀ-ÿ\u00f1\u00d1]{2,})/
+        const regularExpression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+        const nameRegularExpresion = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/
 
-        if (email && password.match(regularExpression) && name.match(nameRegularExpression)) {
+        if (email && password.match(regularExpression) && name.match(nameRegularExpresion)) {
 
             if (getUsers.find(user => user.correo === email)) {
                 alert("El correo ingresado ya existe en la base de datos, por favor ingresa otro.")

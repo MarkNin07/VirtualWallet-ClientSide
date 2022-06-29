@@ -4,7 +4,7 @@ import ToggleDarkButton from "../ToggleDarkButton";
 import { forwardRef } from "react";
 import { ChevronRight } from 'tabler-icons-react';
 import { signOut } from 'firebase/auth';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { getAllUsers } from '../../../actions/user/getAllUsers';
 import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../../state/slice/userSlice';
@@ -56,18 +56,18 @@ const ShellHeader: React.FC<IProps> = ({ setOpened, opened }) => {
 
     const navigate = useNavigate();
 
-    const dispatch = useAppDispatch();
+    const dispatchApp = useAppDispatch();
+
     React.useEffect(() => {
       if (status === posibleStatus.IDLE) {
-        dispatch(getAllUsers())
+        dispatchApp(getAllUsers())
       }
-    }, [dispatch])
+    }, [dispatchApp])
   
     const getUsers = useSelector(selectUsersState())
-    const status = useSelector(selectUsersStatus())
-  
+    const status = useSelector(selectUsersStatus()) 
     const { emailState } = useSelector((state: RootState) => state.logged)
-  
+    
     const realUser: userType | undefined = getUsers.find((user) => user.correo === emailState)
   
     const closeSession = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -80,7 +80,7 @@ const ShellHeader: React.FC<IProps> = ({ setOpened, opened }) => {
           estaActivo: false,
           correoVerificado: realUser?.correoVerificado!
         }
-        dispatch(updateUser(UserSessionUpdated))
+        dispatchApp(updateUser(UserSessionUpdated))
         signOut(auth)
         navigate('/')
     }
@@ -112,7 +112,7 @@ const ShellHeader: React.FC<IProps> = ({ setOpened, opened }) => {
                     placement="center"
                     control={
                         <UserButton
-                            image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
+                            image="https://w7.pngwing.com/pngs/578/369/png-transparent-bitcoin-gold-cryptocurrency-wallet-ethereum-blockchain-wallet-bitcoin-text-logo-sign-thumbnail.png"
                         />
                     }
                 >

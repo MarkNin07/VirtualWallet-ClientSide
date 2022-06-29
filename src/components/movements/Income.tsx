@@ -1,21 +1,17 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { getAllTransactions } from '../../actions/transactions/getAllTransactions';
+import { getAllUsers } from '../../actions/user/getAllUsers';
 import { selectTransactionsState, selectTransactionsStatus } from '../../state/slice/transactionSlice';
-import { posibleStatus } from '../../state/slice/userSlice';
-import { useAppDispatch } from '../../store';
+import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
+import { RootState, useAppDispatch } from '../../store';
 
-interface stateBecauseSend {
-  userSend: string
+interface stateBecauseSend {  
 }
 
-const Income: React.FunctionComponent = (props) => {
+const Income: React.FunctionComponent = () => {
   const dispatch = useAppDispatch()
-
-  const location = useLocation()
-  const state = location.state as stateBecauseSend
-  const { userSend } = state
 
   const statusTransactions = useSelector(selectTransactionsStatus())
   React.useEffect(() => {
@@ -26,7 +22,10 @@ const Income: React.FunctionComponent = (props) => {
 
   const allTransactions = useSelector(selectTransactionsState())
 
-  const ingresos = allTransactions.filter((transaction) => transaction.correoDestino === userSend)
+  //trayendo usuario
+  const { emailState } = useSelector((state: RootState) => state.logged)
+
+  const ingresos = allTransactions.filter((transaction) => transaction.correoDestino === emailState)
 
   return (
     <div>

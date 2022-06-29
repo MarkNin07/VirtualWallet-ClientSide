@@ -1,10 +1,12 @@
-import * as React from "react"
+import React, {useEffect} from "react"
 import { Aside, MediaQuery, ScrollArea, Text } from "@mantine/core";
 import { Table } from '@mantine/core';
 import { posibleStatus, selectUsersState, userType } from "../../../state/slice/userSlice";
 import { useSelector } from "react-redux";
 import { getAllUsers } from "../../../actions/user/getAllUsers";
 import { RootState, useAppDispatch } from "../../../store";
+import { selectAccountsState, selectAccountsStatus } from "../../../state/slice/accountSlice";
+import { getAllAccountsFinal } from "../../../actions/account/getAllAccounts";
 
 interface IProps {
 }
@@ -14,7 +16,7 @@ const ShellAside: React.FC<IProps> = () => {
     const dispatch = useAppDispatch();
   const { emailState } = useSelector((state: RootState) => state.logged)
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (status === posibleStatus.IDLE) {
             dispatch(getAllUsers())
         }
@@ -23,6 +25,17 @@ const ShellAside: React.FC<IProps> = () => {
     const getUsers = useSelector(selectUsersState())
 
     const realUser: userType | undefined = getUsers.find((user) => user.correo === emailState)
+
+    const status = useSelector(selectAccountsStatus())
+    const getAccounts = useSelector(selectAccountsState())
+  
+    useEffect(() => {
+      if (status === posibleStatus.IDLE) {
+        dispatch(getAllAccountsFinal())
+      }
+    }, [dispatch])
+  
+    const userAccount = getAccounts.filter((account) => account.correoUsuario === realUser!.correo)[0]
 
     const ths = (
         <tr>
@@ -38,7 +51,7 @@ const ShellAside: React.FC<IProps> = () => {
             <td>{realUser?.nombre!}</td>
             <td>{realUser?.rol}</td>
             <td>{realUser?.correo}</td>
-            <td>{0}</td>
+            <td>{userAccount.monto}</td>
         </tr>
     );
 

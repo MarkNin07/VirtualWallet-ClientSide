@@ -4,19 +4,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { getAllTransactions } from '../../actions/transactions/getAllTransactions';
 import { selectTransactionsState, selectTransactionsStatus } from '../../state/slice/transactionSlice';
 import { posibleStatus } from '../../state/slice/userSlice';
-import { useAppDispatch } from '../../store';
+import { RootState, useAppDispatch } from '../../store';
 
 interface stateBecauseSend {
-  userSend: string
 }
 
 const Expenses: React.FunctionComponent = (props) => {
 
   const dispatch = useAppDispatch()
-
-  const location = useLocation()
-  const state = location.state as stateBecauseSend
-  const { userSend } = state
 
   const statusTransactions = useSelector(selectTransactionsStatus())
   React.useEffect(() => {
@@ -27,7 +22,11 @@ const Expenses: React.FunctionComponent = (props) => {
 
   const allTransactions = useSelector(selectTransactionsState())
 
-  const egresos = allTransactions.filter((transaction) => transaction.correoOrigen === userSend)
+  const { emailState } = useSelector((state: RootState) => state.logged)
+
+  const egresos = allTransactions.filter((transaction) => transaction.correoOrigen === emailState)
+
+
 
   return (
     <div>

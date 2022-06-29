@@ -7,7 +7,7 @@ import { getAllUsers } from '../../actions/user/getAllUsers';
 import { accountType, selectAccountsState, selectAccountsStatus } from '../../state/slice/accountSlice';
 import { transactionType } from '../../state/slice/transactionSlice';
 import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
-import { useAppDispatch } from '../../store';
+import { RootState, useAppDispatch } from '../../store';
 import moment from 'moment';
 import { createTransaction } from '../../actions/transactions/createTransaction';
 import { updateAccount } from '../../actions/account/updateAccount';
@@ -37,17 +37,20 @@ const SendMoney: React.FunctionComponent = (props) => {
     }
   }, [dispatch])
 
+  /*
   const location = useLocation()
   const state = location.state as stateBecauseSend
-  const { stateSend } = state
+  const { stateSend } = state*/
 
   const getUsers = useSelector(selectUsersState())
 
-  const usuarioOrigen = getUsers.find((user) => user.id === stateSend) as userType
+  //const usuarioOrigen = getUsers.find((user) => user.id === stateSend) as userType
 
   const getAccounts = useSelector(selectAccountsState())
 
-  let cuentaOrigen = getAccounts.find((account) => account.correoUsuario === usuarioOrigen.correo)
+  const { emailState } = useSelector((state: RootState) => state.logged)
+
+  let cuentaOrigen = getAccounts.find((account) => account.correoUsuario === emailState)
 
   const onSendMoney = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -63,7 +66,7 @@ const SendMoney: React.FunctionComponent = (props) => {
         const newTransaction: transactionType = {
           id: nanoid(),
           fecha: moment(new Date()).format("DD/MM/YYYY HH:mm:ss"),
-          correoOrigen: usuarioOrigen.correo!,
+          correoOrigen: emailState!,
           correoDestino: cuentaDestino?.correoUsuario,
           valor: monto
         }
@@ -107,7 +110,7 @@ const SendMoney: React.FunctionComponent = (props) => {
       <form onSubmit={(e) => onSendMoney(e)}>
         <div>
           <label>Producto de Origen</label>
-          <input disabled type='text' style={{ 'backgroundColor': '#DAD7D7' }} value={usuarioOrigen.correo!}></input>
+          <input disabled type='text' style={{ 'backgroundColor': '#DAD7D7' }} value={emailState!}></input>
         </div>
         <br />
         <div>

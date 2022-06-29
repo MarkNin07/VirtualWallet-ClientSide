@@ -13,7 +13,7 @@ const loggedInSlice = createSlice({
             return stateLoggedIn
         },
         logOutInReducer(){
-            return { emailState: null}
+            return { emailState: null, photoURL: ''}
         }
     }
 })

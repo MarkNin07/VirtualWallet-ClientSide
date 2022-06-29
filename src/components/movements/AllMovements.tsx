@@ -4,19 +4,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { getAllTransactions } from '../../actions/transactions/getAllTransactions';
 import { selectTransactionsState, selectTransactionsStatus } from '../../state/slice/transactionSlice';
 import { posibleStatus, selectUsersState, selectUsersStatus } from '../../state/slice/userSlice';
-import { useAppDispatch } from '../../store';
+import { RootState, useAppDispatch } from '../../store';
 
-interface userStateSend {
-    userSend: string
+interface userStateSend {    
 }
 
 const AllMovements: React.FunctionComponent = (props) => {
 
     const dispatch = useAppDispatch()
-
-    const location = useLocation()
-    const state = location.state as userStateSend
-    const { userSend } = state
 
     const statusTransactions = useSelector(selectTransactionsStatus())
     React.useEffect(() => {
@@ -26,7 +21,11 @@ const AllMovements: React.FunctionComponent = (props) => {
     }, [dispatch])
 
     const allTransactions = useSelector(selectTransactionsState())
-    const transaccionWhereIamOriginAndDestination = allTransactions.filter((transaction) => transaction.correoDestino===userSend || transaction.correoOrigen===userSend)
+
+    const { emailState } = useSelector((state: RootState) => state.logged)
+
+    const transaccionWhereIamOriginAndDestination = allTransactions.filter((transaction) => transaction.correoDestino===emailState || transaction.correoOrigen===emailState)
+
 
     return (
         <div>

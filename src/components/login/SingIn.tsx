@@ -35,10 +35,10 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
     const signInForm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
 
-        const regularExpression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]{2}).{8,}$/
-        const nameRegularExpression =  /([a-zA-ZÀ-ÿ\u00f1\u00d1]{2,})*[\s]{1,1}([a-zA-ZÀ-ÿ\u00f1\u00d1]{2,})/
+        const regularExpression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+        const nameRegularExpresion = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/
 
-        if (email && password.match(regularExpression) && name.match(nameRegularExpression)) {
+        if (email && password.match(regularExpression) && name.match(nameRegularExpresion)) {
 
             if (getUsers.find(user => user.correo === email)) {
                 alert("El correo ingresado ya existe en la base de datos, por favor ingresa otro.")
@@ -81,7 +81,16 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
             setPassword('')
             setName('')
         } else {
-            alert("Ambos campos deben estar con información valida. La contraseña debe contar con al menos: Una letra en mayúscula, Una letra en minúscula, Un dígito, Dos caracteres especiales, y al menos ocho caracteres. El nombre de contener al menos 2 palabras")
+            if(!name.match(nameRegularExpresion)){
+                alert('El nombre no debe contener caracteres especiales ni numeros. Se debe tener mínimo un nombre de dos letras para realizar el registro')
+            }
+            if(!password.match(regularExpression)){
+                alert('La contraseña debe contar con al menos: Una letra en mayúscula, Una letra en minúscula, Un dígito, Un caracter especiales, y al menos ocho caracteres.')
+            }
+            if(!email || !password || !name){
+                alert("Todos los campos deben tener información.")
+            }
+            
         }
 
     }

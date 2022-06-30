@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrandPaypal, ClipboardText, Home, ReportMoney, ZoomMoney} from 'tabler-icons-react';
+import {BrandPaypal, ClipboardText, Coin, Home, ReportMoney, ZoomMoney} from 'tabler-icons-react';
 import {Group, Text, ThemeIcon, UnstyledButton} from '@mantine/core';
 import {useNavigate} from "react-router-dom";
 
@@ -44,7 +44,7 @@ const data = [
 
     { icon: <ZoomMoney size={16} />, color: 'blue', label: 'Movimientos', path: '/movimientos' },
     { icon: <ReportMoney size={16} />, color:'green', strokeWidth:2, label: 'Ingresos', path: '/ingresos' },
-    { icon: <BrandPaypal size={16} />, color: 'pink', label: 'Egresos', path: '/egresos' },
+    { icon: <Coin size={16} />, color: 'orange', label: 'Egresos', path: '/egresos' },
     { icon: <BrandPaypal size={16} />, color: 'pink', label: 'Enviar Dinero', path: '/sendMoney' }
 ];
 

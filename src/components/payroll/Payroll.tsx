@@ -1,7 +1,7 @@
 import { MouseEvent, ChangeEvent, FunctionComponent, useEffect, useState } from 'react';
 import { account } from '../../state/slice/payrollSlice';
 import * as XLSX from 'xlsx';
-import { Alert, Button, Form, Stack, Table } from 'react-bootstrap';
+import { Stack } from 'react-bootstrap';
 import { posibleStatus, selectUsersFetchError, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
 import { getAllUsers } from '../../actions/user/getAllUsers';
 import './Payroll.css'
@@ -20,6 +20,7 @@ import { updateUser } from '../../actions/user/updateUser';
 import { auth } from '../../fireabseConfig';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { Button, Table } from '@mantine/core';
 
 interface IUserProps {
 }
@@ -68,17 +69,15 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
     const [showButton, setShowButton] = useState<boolean>(false);
     const [showError, setShowError] = useState<boolean>(false);
     const [showTable, setShowTable] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string>("");
 
     const { emailState } = useAppSelector((state: RootState) => state.logged)
 
     const realUser: userType | undefined = usersLists.find((user) => user.correo === emailState)
 
     const readExcel = (file: any) => {
-        setShowError(false);
         setShowButton(false);
         setShowTable(false);
-        setErrorMessage("");
+
         const promise = new Promise((resolve, reject) => {
             const fileReader = new FileReader();
 
@@ -92,8 +91,12 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
                     try {
                         const wb = XLSX.read(bufferArray, { type: 'buffer' });
                         if (wb.Props === undefined) {
-                            setErrorMessage("El archivo seleccionado NO es 'excel'")
-                            setShowError(true);
+                            Swal.fire({
+                                title: '¡Formato Incorrecto!',
+                                text: "El archivo seleccionado NO es 'excel'",
+                                icon: 'error'
+                            })
+
                             setShowTable(false);
                             return
                         }
@@ -105,8 +108,11 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
                         if (typeof e === "string") {
                             console.log(e)
                         } else if (e instanceof Error) {
-                            setErrorMessage("El archivo seleccionado NO es 'excel'")
-                            setShowError(true);
+                            Swal.fire({
+                                title: '¡Formato Incorrecto!',
+                                text: "El archivo seleccionado NO es 'excel'",
+                                icon: 'error'
+                            })
                             setShowTable(false);
                         }
                         setExcelState([]);
@@ -134,8 +140,12 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
                 typeof account.ID === "string" &&
                 typeof account.Monto === "number"
             )).length == 0) {
-                setErrorMessage("El archivo seleccionado NO tiene un formato válido")
-                setShowError(true);
+                Swal.fire({
+                    title: '¡Formato Incorrecto!',
+                    text: "El archivo seleccionado NO tiene un formato válido",
+                    icon: 'error'
+                })
+
                 setShowTable(false);
                 setExcelState([]);
                 return
@@ -146,8 +156,11 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
                 const errorData = jsonData.filter((account) => (
                     typeof account.Monto !== 'number'
                 ))
-                setErrorMessage("Los siguientes registros tienen Montos con datos NO numéricos, para poder procesar el archivo debe corregirlos o eliminarlos")
-                setShowError(true);
+                Swal.fire({
+                    title: '¡Formato Incorrecto!',
+                    text: "Los siguientes registros tienen Montos con datos NO numéricos, para poder procesar el archivo debe corregirlos o eliminarlos",
+                    icon: 'error'
+                })
                 setExcelState(errorData);
                 setShowTable(true);
                 return
@@ -158,16 +171,23 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
                 const errorData = jsonData.filter((account) => (
                     account.Monto <= 0
                 ))
-                setErrorMessage("Los siguientes registros tienen Montos en cero (0) o negativos, para poder procesar el archivo debe corregirlos o eliminarlos")
-                setShowError(true);
+                Swal.fire({
+                    title: '¡Formato Incorrecto!',
+                    text: "Los siguientes registros tienen Montos en cero (0) o negativos, para poder procesar el archivo debe corregirlos o eliminarlos",
+                    icon: 'error'
+                })
+
                 setExcelState(errorData);
                 setShowTable(true);
                 return
             }
             const adminUser = usersLists.find((user) => user.rol === 'admin');
             if (!adminUser) {
-                setErrorMessage("El sistema debe tener creada una cuenta administrador, para poder procesar el archivo comuniquese con Grupo 3")
-                setShowError(true);
+                Swal.fire({
+                    title: '¡Formato Incorrecto!',
+                    text: "El sistema debe tener creada una cuenta administrador, para poder procesar el archivo comuniquese con Grupo 3",
+                    icon: 'error'
+                })
                 return
             }
             const invalidUser = jsonData.filter((account) => {
@@ -180,8 +200,11 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
                 return true
             })
             if (invalidUser.length > 0) {
-                setErrorMessage("Los siguientes registros tienen Cuentas inválidas, para poder procesar el archivo debe corregirlas o eliminarlas")
-                setShowError(true);
+                Swal.fire({
+                    title: '¡Formato Incorrecto!',
+                    text: "Los siguientes registros tienen Cuentas inválidas, para poder procesar el archivo debe corregirlas o eliminarlas",
+                    icon: 'error'
+                })
                 setExcelState(invalidUser);
                 setShowTable(true);
                 return
@@ -297,90 +320,86 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
         }
 
     }
+    const ths = (
+        <tr>
+            <th>#</th>
+            <th>Cuenta Destino</th>
+            <th>Monto</th>
+        </tr>
+    );
 
+    const rows = excelState.map((payment: account) => (
+        <tr key={payment.__rowNum__}>
+            <td>{payment.__rowNum__}</td>
+            <td>{payment.ID}</td>
+            <td>{payment.Monto}</td>
+        </tr>
+    ));
     return (
-        <>
+        <div style={{ padding: "5%" }}>
             <Stack gap={2}>
                 <div className="bg-light border">
-                    <h1 style={{ marginLeft: '1rem' }}>Pago de Nómina</h1>
+                    <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">Pago de Nómina</h1>
                 </div>
                 <div className='d-grid gap-2'>
-                    <Button
-                        onClick={(e) => downloadTemplate(e)}
-                        className='download-button'
-                        size="lg"
-                    >Descargar Plantilla para Pago de Nómina</Button>
+
+                    <Button onClick={(e: any) => downloadTemplate(e)} fullWidth variant="outline">
+                        Descargar Plantilla para Pago de Nómina
+                    </Button>
+
                 </div>
-                <Form.Group controlId="formFileLg" className="mb-3">
-                    <Form.Control
-                        className='file-input'
-                        type="file"
-                        size="lg"
-                        accept='.xls,.xlsx,application/msexcel'
-                        required
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            if (e.target.files != null) {
-                                const file = e.target.files[0]
-                                readExcel(file)
-                            }
-                        }}
-                    />
-                </Form.Group>
                 <>
-                    {showError &&
-                        <Alert variant="warning">
-                            <Alert.Heading>
-                                <h5>Advertencia!!!</h5>
-                            </Alert.Heading>
-                            <p>{errorMessage}</p>
-                            <Button onClick={() => setShowError(false)}>Cerrar</Button>
-                        </Alert>
-                    }
+
+                    <input type="file" className="text-sm text-grey-500
+            file:mr-5 file:py-2 file:px-6
+            file:rounded-full file:border-0
+            file:text-sm file:font-medium
+            file:bg-blue-50 file:text-blue-700
+            hover:file:cursor-pointer hover:file:bg-amber-50
+            hover:file:text-amber-700 w-full"
+            accept='.xls,.xlsx,application/msexcel'
+            required
+            placeholder="Seleccione el archivo"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                if (e.target.files != null) {
+                    const file = e.target.files[0]
+                    readExcel(file)
+                }
+            }} />
+
                 </>
+
                 <div className='d-grid gap-2'>
-                    <Button
-                        onClick={(e) => userLogout(e)}
-                        variant="outline-danger"
-                        size="lg"
-                    >Salir</Button>
+                    <Button color="red" onClick={(e: any) => userLogout(e)} fullWidth variant="outline">
+                        Salir
+                    </Button>
+
                 </div>
                 <>
                     {showButton &&
                         <div className='d-grid gap-2'>
-                            <Button
-                                className='download-button'
-                                name="executePayroll"
-                                size="lg"
-                                onClick={(e) => executePayroll(e)}
-                            >Realizar el Pago de Nómina</Button>
+                            <Button name="executePayroll" onClick={(e: any) => executePayroll(e)} fullWidth variant="outline">
+                                Realizar el Pago de Nómina
+                            </Button>
+
+
                         </div>
                     }
                 </>
                 <br />
                 <>
                     {showTable &&
-                        <Table striped bordered hover className='container'>
-                            <thead className='table-head'>
-                                <tr>
-                                    <th scope='col'>#</th>
-                                    <th scope='col'>ID Cuenta</th>
-                                    <th scope='col'>Monto</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {excelState.map((payment: account) => (
-                                    <tr key={payment.__rowNum__}>
-                                        <th scope='row'>{payment.__rowNum__}</th>
-                                        <td>{payment.ID}</td>
-                                        <td>{payment.Monto}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
+
+                        <Table striped highlightOnHover>
+                            <caption>Relación de cuentas para pago de nómina</caption>
+                            <thead>{ths}</thead>
+                            <tbody>{rows}</tbody>
                         </Table>
+
                     }
                 </>
             </Stack>
-        </>
+        </div>
     )
 }
 

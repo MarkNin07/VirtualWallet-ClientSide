@@ -1,6 +1,5 @@
 import * as React from 'react';
 import LogIn from './LogIn';
-import VerifyEmail from './VerifyEmail';
 
 interface IPagePpalProps {
 }

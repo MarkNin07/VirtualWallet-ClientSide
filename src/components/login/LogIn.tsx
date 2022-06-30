@@ -3,17 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getAllUsers } from '../../actions/user/getAllUsers';
-
 import { updateUser } from '../../actions/user/updateUser';
 import { auth } from '../../fireabseConfig';
 import { logInInReducer } from '../../state/slice/loggedInSlice';
 import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
 import { verifiedInInReducer } from '../../state/slice/verifiedSlice';
-import { RootState, useAppDispatch } from '../../store';
+import { RootState, useAppDispatch, useAppSelector } from '../../store';
 import { Input } from '@mantine/core';
 import { At } from 'tabler-icons-react';
-import { Modal, Button, Group, PasswordInput } from '@mantine/core';
+import { Modal, Button, PasswordInput } from '@mantine/core';
 import SingIn from './SingIn';
+import Swal from 'sweetalert2';
 
 interface ILogInProps {
 }
@@ -27,19 +27,19 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
   const dispatch = useDispatch()
   const dispatchApp = useAppDispatch()
 
-  const status = useSelector(selectUsersStatus())
-  const getUsers = useSelector(selectUsersState())
+  const userStatus = useAppSelector(selectUsersStatus())
 
   useEffect(() => {
-    if (status === posibleStatus.IDLE) {
+    if (userStatus === posibleStatus.IDLE) {
       dispatchApp(getAllUsers())
     }
   }, [dispatch])
 
+  const getUsers = useAppSelector(selectUsersState())
+
   const userToChangeVerify = getUsers.filter((user) => user.correo === email)[0]
 
   const { emailState } = useSelector((state: RootState) => state.logged)
-  
 
   useEffect(() => {
     if (emailState === null) {
@@ -55,7 +55,7 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
         .then((result) => {
           if (!result.user.emailVerified) {
             const verified = result.user.emailVerified
-            const photo = result.user.photoURL     
+            const photo = result.user.photoURL
             dispatch(verifiedInInReducer(verified))
             navigate('/verifyEmail')
           }
@@ -64,7 +64,11 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
             const actualUser = getUsers.find((user) => user.correo === email)
 
             if (actualUser?.estaActivo!) {
-              alert("ya inicio sesión en otro dispositivo")
+              Swal.fire({
+                title: 'Fallo de Inicio de Sesión!',
+                text: "ya inicio sesión en otro dispositivo " + result.user.email,
+                icon: 'error'
+              })
               navigate('/')
               return
             }
@@ -76,6 +80,16 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
             dispatch(logInInReducer(actualEmail))
 
             if (adminUser?.correo! === actualEmail) {
+              const updatedUser: userType = {
+                id: userToChangeVerify?.id,
+                nombre: userToChangeVerify?.nombre,
+                correo: email,
+                contrasena: password,
+                rol: 'colaborador',
+                estaActivo: true,
+                correoVerificado: result.user.emailVerified
+              }
+              dispatchApp(updateUser(updatedUser))
               navigate('/payroll')
               return
             }
@@ -96,13 +110,25 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
         .catch(error => {
           const errorMessage = error.message
           if (errorMessage === "Firebase: Error (auth/user-not-found).") {
-            alert('No hay un usuario registrado en el sistema con la información ingresada. Por favor registrate')
+            Swal.fire({
+              title: 'Algo Falló!',
+              text: "No hay un usuario registrado en el sistema con la información ingresada. Por favor registrate",
+              icon: 'error'
+            })
           }
           if (errorMessage === "Firebase: Error (auth/invalid-email).") {
-            alert('Has ingresado un correo incorrecto')
+            Swal.fire({
+              title: 'Algo Falló!',
+              text: "Has ingresado un correo incorrecto",
+              icon: 'error'
+            })
           }
           if (errorMessage === "Firebase: Error (auth/wrong-password).") {
-            alert('Has ingresado una contraseña incorrecta')
+            Swal.fire({
+              title: 'Algo Falló!',
+              text: "Has ingresado una contraseña incorrecta",
+              icon: 'error'
+            })
           }
           console.log(errorMessage);
         })
@@ -155,7 +181,7 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
               onChange={(e: any) => setPassword(e.target.value)}
               value={password}
               placeholder="Password"
-              description="La contraseña debe contener al menos 8 caracteres, minúscula, mayúscula, números y 2 caracteres especiales"
+              description="La contraseña debe contener al menos 8 caracteres, minúscula, mayúscula, al meno un número y al menos un caracter especial"
               variant="filled"
               radius="md"
               required

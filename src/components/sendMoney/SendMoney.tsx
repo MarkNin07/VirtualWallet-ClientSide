@@ -1,16 +1,16 @@
 import { nanoid } from '@reduxjs/toolkit';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getAllAccountsFinal } from '../../actions/account/getAllAccounts';
 import { getAllUsers } from '../../actions/user/getAllUsers';
 import { accountType, selectAccountsState, selectAccountsStatus } from '../../state/slice/accountSlice';
 import { transactionType } from '../../state/slice/transactionSlice';
 import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
-import { RootState, useAppDispatch } from '../../store';
+import { RootState, useAppDispatch, useAppSelector } from '../../store';
 import moment from 'moment';
 import { createTransaction } from '../../actions/transactions/createTransaction';
 import { updateAccount } from '../../actions/account/updateAccount';
+import Swal from 'sweetalert2';
 
 interface stateBecauseSend {
   stateSend: string
@@ -22,7 +22,7 @@ const SendMoney: React.FunctionComponent = (props) => {
   const [monto, setMonto] = useState(0)
 
   const dispatch = useAppDispatch()
-  const statusUsers = useSelector(selectUsersStatus())
+  const statusUsers = useAppSelector(selectUsersStatus())
 
   useEffect(() => {
     if (statusUsers === posibleStatus.IDLE) {
@@ -30,7 +30,7 @@ const SendMoney: React.FunctionComponent = (props) => {
     }
   }, [dispatch])
 
-  const statusAccounts = useSelector(selectAccountsStatus())
+  const statusAccounts = useAppSelector(selectAccountsStatus())
   useEffect(() => {
     if (statusAccounts === posibleStatus.IDLE) {
       dispatch(getAllAccountsFinal())
@@ -42,13 +42,13 @@ const SendMoney: React.FunctionComponent = (props) => {
   const state = location.state as stateBecauseSend
   const { stateSend } = state*/
 
-  const getUsers = useSelector(selectUsersState())
+  const getUsers = useAppSelector(selectUsersState())
 
   //const usuarioOrigen = getUsers.find((user) => user.id === stateSend) as userType
 
-  const getAccounts = useSelector(selectAccountsState())
+  const getAccounts = useAppSelector(selectAccountsState())
 
-  const { emailState } = useSelector((state: RootState) => state.logged)
+  const { emailState } = useAppSelector((state: RootState) => state.logged)
 
   let cuentaOrigen = getAccounts.find((account) => account.correoUsuario === emailState)
 
@@ -57,10 +57,17 @@ const SendMoney: React.FunctionComponent = (props) => {
     if (productoDestino && monto && (monto <= cuentaOrigen?.monto!) && productoDestino !== cuentaOrigen?.correoUsuario) {
 
       if (productoDestino === cuentaOrigen?.correoUsuario) {
-        alert('No puedes enviar dinero a ti mismo desde la misma cuenta')
+        Swal.fire({
+          title: 'Algo falló!',
+          text: "No te puedes enviar dinero a ti mismo, desde tu misma cuenta",
+          icon: 'error'
+        })
       }
 
       let cuentaDestino = getAccounts.find((account) => account.correoUsuario === productoDestino)
+      console.log(productoDestino)
+      console.log(getAccounts)
+      console.log(cuentaDestino)
 
       if (cuentaDestino) {
         const newTransaction: transactionType = {
@@ -72,7 +79,11 @@ const SendMoney: React.FunctionComponent = (props) => {
         }
 
         dispatch(createTransaction(newTransaction))
-        alert('se ha generado la transaccion')
+        Swal.fire({
+          title: 'Transferencia Exitosa!',
+          text: "Se ha generado la transaccion",
+          icon: 'success'
+        })
 
         const cuentaOrigenUpdated: accountType = {
           id: cuentaOrigen?.id,
@@ -91,14 +102,22 @@ const SendMoney: React.FunctionComponent = (props) => {
 
         setProductoDestino('')
         setMonto(0)
-        
+
         navigate('/perfil')
       } else {
-        alert('El usuario al que se le envia la informacion no existe en la base de datos')
+        Swal.fire({
+          title: 'Algo falló!',
+          text: "El usuario al que se le envia la informacion no existe en la base de datos",
+          icon: 'error'
+        })
         setProductoDestino('')
       }
     } else {
-      alert('Los campos de Producto Destino y Monto deben contener información o el monto ingresado excede a la cantidad que tienes en tu cuenta')
+      Swal.fire({
+        title: 'Algo falló!',
+        text: "Los campos de Producto Destino y Monto deben contener información o el monto ingresado excede a la cantidad que tienes en tu cuenta",
+        icon: 'error'
+      })
       setProductoDestino('')
       setMonto(0)
     }

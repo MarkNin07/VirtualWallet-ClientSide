@@ -1,7 +1,7 @@
-import React, {useEffect} from "react"
+import React, { useEffect } from "react"
 import { Aside, MediaQuery, ScrollArea, Text } from "@mantine/core";
 import { Table } from '@mantine/core';
-import { posibleStatus, selectUsersState, userType } from "../../../state/slice/userSlice";
+import { posibleStatus, selectUsersState, selectUsersStatus, userType } from "../../../state/slice/userSlice";
 import { useSelector } from "react-redux";
 import { getAllUsers } from "../../../actions/user/getAllUsers";
 import { RootState, useAppDispatch } from "../../../store";
@@ -14,10 +14,12 @@ interface IProps {
 const ShellAside: React.FC<IProps> = () => {
 
     const dispatch = useAppDispatch();
-  const { emailState } = useSelector((state: RootState) => state.logged)
+    const { emailState } = useSelector((state: RootState) => state.logged)
+
+    const statusUser = useSelector(selectUsersStatus())
 
     useEffect(() => {
-        if (status === posibleStatus.IDLE) {
+        if (statusUser === posibleStatus.IDLE) {
             dispatch(getAllUsers())
         }
     }, [dispatch])
@@ -26,16 +28,17 @@ const ShellAside: React.FC<IProps> = () => {
 
     const realUser: userType | undefined = getUsers.find((user) => user.correo === emailState)
 
-    const status = useSelector(selectAccountsStatus())
-    const getAccounts = useSelector(selectAccountsState())
-  
+    const statusAccount = useSelector(selectAccountsStatus())
+
     useEffect(() => {
-      if (status === posibleStatus.IDLE) {
-        dispatch(getAllAccountsFinal())
-      }
+        if (statusAccount === posibleStatus.IDLE) {
+            dispatch(getAllAccountsFinal())
+        }
     }, [dispatch])
-  
-    const userAccount = getAccounts.filter((account) => account.correoUsuario === realUser!.correo)[0]
+
+    const getAccounts = useSelector(selectAccountsState())
+
+    const userAccount = getAccounts.find((account) => account.correoUsuario === realUser!.correo)
 
     const ths = (
         <tr>
@@ -51,13 +54,13 @@ const ShellAside: React.FC<IProps> = () => {
             <td>{realUser?.nombre!}</td>
             <td>{realUser?.rol}</td>
             <td>{realUser?.correo}</td>
-            <td>{userAccount.monto}</td>
+            <td>{userAccount?.monto}</td>
         </tr>
     );
 
     return (<>
 
-        <Table style={{marginTop:"10%", justifyContent:"flex-start", height:"10%", width:"80%", alignItems:"center"}} highlightOnHover captionSide="top">
+        <Table style={{ marginTop: "10%", justifyContent: "flex-start", height: "10%", width: "80%", alignItems: "center" }} highlightOnHover captionSide="top">
             <caption>Resumen de cuenta</caption>
             <thead>{ths}</thead>
             <tbody>{rows}</tbody>

@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getAllAccountsFinal } from '../../actions/account/getAllAccounts';
-
 import { selectAccountsState, selectAccountsStatus } from '../../state/slice/accountSlice';
 import { posibleStatus, userType } from '../../state/slice/userSlice';
-import { useAppDispatch } from '../../store';
+import { RootState, useAppDispatch } from '../../store';
 
 type userPropsType = {
   props: userType | undefined
@@ -22,7 +21,8 @@ const User: React.FunctionComponent<userPropsType> = ({ props }) => {
     }
   }, [dispatch])
 
-  const userAccount = getAccounts.filter((account) => account.correoUsuario === props!.correo)[0]
+  const { emailState } = useSelector((state: RootState) => state.logged)
+  const userAccount = getAccounts.find((account) => account.correoUsuario === emailState)
 
   return (
     <tbody>

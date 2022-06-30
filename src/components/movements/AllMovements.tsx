@@ -1,3 +1,4 @@
+import { Table } from '@mantine/core';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
@@ -6,7 +7,7 @@ import { selectTransactionsState, selectTransactionsStatus } from '../../state/s
 import { posibleStatus, selectUsersState, selectUsersStatus } from '../../state/slice/userSlice';
 import { RootState, useAppDispatch } from '../../store';
 
-interface userStateSend {    
+interface userStateSend {
 }
 
 const AllMovements: React.FunctionComponent = (props) => {
@@ -24,36 +25,43 @@ const AllMovements: React.FunctionComponent = (props) => {
 
     const { emailState } = useSelector((state: RootState) => state.logged)
 
-    const transaccionWhereIamOriginAndDestination = allTransactions.filter((transaction) => transaction.correoDestino===emailState || transaction.correoOrigen===emailState)
+    const transaccionWhereIamOriginAndDestination = allTransactions.filter((transaction) => transaction.correoDestino === emailState || transaction.correoOrigen === emailState)
 
 
+
+    const ths = (
+        <tr>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Valor</th>
+            <th>Fecha</th>
+        </tr>
+    );
+
+    const rows = transaccionWhereIamOriginAndDestination.map((transacciones) => (
+        <tr key={transacciones.id}>
+            <td>{transacciones.correoOrigen}</td>
+            <td>{transacciones.correoDestino}</td>
+            <td>{Number(transacciones.valor)}</td>
+            <td>{transacciones.fecha}</td>
+        </tr>
+    ));
     return (
         <div>
-            <div className='display'>
-                <table >
-                    <thead>
-                        <tr>
-                            <td>Origen</td>
-                            <td>Destino</td>
-                            <td>Valor</td>
-                            <td>Fecha</td>
-                        </tr>
-                    </thead>
-                    {transaccionWhereIamOriginAndDestination.map((transaction) => {
-                        return <tbody key={transaction.id}>
-                            <tr>
-                                <td>{transaction.correoOrigen}</td>
-                                <td>{transaction.correoDestino}</td>
-                                <td>{Number(transaction.valor)}</td>
-                                <td>{transaction.fecha}</td>
-                            </tr>
-                        </tbody>
-                    })}
-                </table>
-            </div>
-            <Link to='/perfil'>
-                <button>Regresar al Perfil</button>
+            <Link to='/perfil' style={{justifyContent:"right", display:"flex"}}>
+                <button role="button"
+                    className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-2 w-40">
+                    Regresar</button>
             </Link>
+
+            <Table striped highlightOnHover>
+                <caption>Resumen de sus movimientos</caption>
+                <thead>{ths}</thead>
+                <tbody>{rows}</tbody>
+            </Table>
+
+
+
         </div>
     )
 };

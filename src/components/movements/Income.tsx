@@ -1,3 +1,4 @@
+import { Table } from '@mantine/core';
 import React, {useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
@@ -27,34 +28,37 @@ const Income: React.FunctionComponent = () => {
 
   const ingresos = allTransactions.filter((transaction) => transaction.correoDestino === emailState)
 
+
+  const ths = (
+    <tr>
+        <th>Origen</th>
+        <th>Destino</th>
+        <th>Valor</th>
+        <th>Fecha</th>
+    </tr>
+);
+
+const rows = ingresos.map((transacciones) => (
+    <tr key={transacciones.id}>
+        <td>{transacciones.correoOrigen}</td>
+        <td>{transacciones.correoDestino}</td>
+        <td>{Number(transacciones.valor)}</td>
+        <td>{transacciones.fecha}</td>
+    </tr>
+));
   return (
     <div>
-      <div className='display'>
-        <table >
-          <thead>
-            <tr>
-              <td>Origen</td>
-              <td>Destino</td>
-              <td>Valor</td>
-              <td>Fecha</td>
-            </tr>
-          </thead>
-          {ingresos.map((ingreso) => {
-            return <tbody key={ingreso.id}>
-              <tr>
-                <td>{ingreso.correoOrigen}</td>
-                <td>{ingreso.correoDestino}</td>
-                <td>{Number(ingreso.valor)}</td>
-                <td>{ingreso.fecha}</td>
-              </tr>
-            </tbody>
-          })}
-        </table>
-      </div>
-      <br />
-      <Link to='/perfil'>
-        <button>Regresar al Perfil</button>
-      </Link>
+            <Link to='/perfil' style={{justifyContent:"right", display:"flex"}}>
+                <button role="button"
+                    className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-2 w-40">
+                    Regresar</button>
+            </Link>
+
+            <Table striped highlightOnHover>
+                <caption>Resumen de ingresos</caption>
+                <thead>{ths}</thead>
+                <tbody>{rows}</tbody>
+            </Table>
     </div>
   )
 };

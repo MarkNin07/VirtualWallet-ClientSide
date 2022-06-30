@@ -156,7 +156,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
                             className="w-full"
                             value={password}
                             placeholder="Password"
-                            description="La contraseña debe contener al menos 8 caracteres, minúscula, mayúscula, al meno un número y al menos un caracter especial"
+                            description="La contraseña debe contener al menos 8 caracteres, minúscula, mayúscula, al menos un número y al menos un caracter especial"
                             variant="filled"
                             radius="md"
                             required

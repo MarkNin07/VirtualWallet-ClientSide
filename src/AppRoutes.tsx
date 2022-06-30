@@ -11,10 +11,11 @@ import Income from './components/movements/Income'
 import Expenses from './components/movements/Expenses'
 import PagePpal from './components/login/Page'
 import Payroll from './components/payroll/Payroll'
+import Profile from './components/users/navlinks/Profile';
 
 type Props = {}
 
-const AppRoutes : React.FC<Props> = () => {
+const AppRoutes: React.FC<Props> = () => {
 
     const { emailState } = useSelector((state: RootState) => state.logged)
     return (
@@ -26,13 +27,14 @@ const AppRoutes : React.FC<Props> = () => {
                 <Link to='/perfil'></Link>}
 
             <Routes>
-                <Route path='perfil' element={<UserProfile />} />
-                <Route path='sendMoney' element={<SendMoney />} />
+                <Route path='/perfil' element={<UserProfile />} >
+                    <Route index element={<Profile />} />
+                    <Route path='sendMoney' element={<SendMoney />} />
+                    <Route path='movimientos' element={<AllMovements />} />
+                    <Route path='ingresos' element={<Income />} />
+                    <Route path='egresos' element={<Expenses />} />
+                </Route>
                 <Route path='verifyEmail' element={<VerifyEmail />} />
-
-                <Route path='movimientos' element={<AllMovements />} />
-                <Route path='ingresos' element={<Income />} />
-                <Route path='egresos' element={<Expenses />} />
                 <Route path='payroll' element={<Payroll />} />
                 <Route path='/' element={<PagePpal />} />
             </Routes>

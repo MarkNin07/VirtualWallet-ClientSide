@@ -42,10 +42,10 @@ function MainLink({ icon, color, label, path }: MainLinkProps) {
 
 const data = [
 
-    { icon: <ZoomMoney size={16} />, color: 'blue', label: 'Movimientos', path: '/movimientos' },
-    { icon: <ReportMoney size={16} />, color:'green', strokeWidth:2, label: 'Ingresos', path: '/ingresos' },
-    { icon: <Coin size={16} />, color: 'orange', label: 'Egresos', path: '/egresos' },
-    { icon: <BrandPaypal size={16} />, color: 'pink', label: 'Enviar Dinero', path: '/sendMoney' }
+    { icon: <ZoomMoney size={16} />, color: 'blue', label: 'Movimientos', path: '/perfil/movimientos' },
+    { icon: <ReportMoney size={16} />, color:'green', strokeWidth:2, label: 'Ingresos', path: '/perfil/ingresos' },
+    { icon: <Coin size={16} />, color: 'orange', label: 'Egresos', path: '/perfil/egresos' },
+    { icon: <BrandPaypal size={16} />, color: 'pink', label: 'Enviar Dinero', path: '/perfil/sendMoney' }
 ];
 
 export function MainLinks() {

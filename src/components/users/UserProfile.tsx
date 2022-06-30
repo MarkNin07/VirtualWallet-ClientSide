@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { getAllUsers } from '../../actions/user/getAllUsers';
 import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
 import { RootState, useAppDispatch, useAppSelector } from '../../store';
@@ -23,7 +23,7 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
 
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-  const main = { background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[1], }
+  const main = { background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.white, }
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -77,11 +77,10 @@ const UserList: React.FunctionComponent<IUserListProps> = (props) => {
       asideOffsetBreakpoint="sm"
       fixed
       navbar={<ShellNavbar opened={opened} />}
-      aside={<ShellAside />}
       footer={<ShellFooter />}
       header={<ShellHeader opened={opened} setOpened={setOpened} />}
     >
-
+      <Outlet />
     </AppShell>
   );
 

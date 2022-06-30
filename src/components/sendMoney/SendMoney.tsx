@@ -151,8 +151,8 @@ const SendMoney: React.FunctionComponent = (props) => {
                   </form>
                </div>
                <svg className="absolute top-0 left-0 z-0 w-32 h-32 -mt-12 -ml-12 text-gray-200 fill-current" viewBox="0 0 91 91" xmlns="http://www.w3.org/2000/svg">
-                  <g stroke="none" stroke-width="1" fill-rule="evenodd">
-                     <g fill-rule="nonzero">
+                  <g stroke="none" strokeWidth="1" fillRule="evenodd">
+                     <g fillRule="nonzero">
                         <g>
                            <g>
                               <circle cx="3.261" cy="3.445" r="2.72"></circle>
@@ -239,8 +239,8 @@ const SendMoney: React.FunctionComponent = (props) => {
                   </g>
                </svg>
                <svg className="absolute bottom-0 right-0 z-0 w-32 h-32 -mb-12 -mr-12 text-blue-600 fill-current" viewBox="0 0 91 91" xmlns="http://www.w3.org/2000/svg">
-                  <g stroke="none" stroke-width="1" fill-rule="evenodd">
-                     <g fill-rule="nonzero">
+                  <g stroke="none" strokeWidth="1" fillRule="evenodd">
+                     <g fillRule="nonzero">
                         <g>
                            <g>
                               <circle cx="3.261" cy="3.445" r="2.72"></circle>

@@ -118,14 +118,14 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
           if (errorMessage === "Firebase: Error (auth/invalid-email).") {
             Swal.fire({
               title: 'Algo Falló!',
-              text: "Has ingresado un correo incorrecto",
+              text: "Datos de usuario incorrectos",
               icon: 'error'
             })
           }
           if (errorMessage === "Firebase: Error (auth/wrong-password).") {
             Swal.fire({
               title: 'Algo Falló!',
-              text: "Has ingresado una contraseña incorrecta",
+              text: "Datos de usuario incorrectos",
               icon: 'error'
             })
           }
@@ -180,7 +180,6 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
               onChange={(e: any) => setPassword(e.target.value)}
               value={password}
               placeholder="Password"
-              description="La contraseña debe contener al menos 8 caracteres, minúscula, mayúscula, al menos un número y al menos un caracter especial"
               variant="filled"
               radius="md"
               required

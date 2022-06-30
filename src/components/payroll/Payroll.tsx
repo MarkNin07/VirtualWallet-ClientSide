@@ -208,6 +208,20 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
                 setShowTable(true);
                 return
             }
+            const notDuplicated = new Set()
+            const Duplicated = new Array()
+            jsonData.forEach((email) => {
+                notDuplicated.add(email.ID)
+                Duplicated.push(email.ID)
+            })
+            if (notDuplicated.size !== Duplicated.length) {
+                Swal.fire({
+                    title: '¡Formato Incorrecto!',
+                    text: "Los siguientes registros tienen Cuentas duplicadas, para poder procesar el archivo debe eliminarlas",
+                    icon: 'error'
+                })
+                return
+            }
             setExcelState(jsonData);
             setShowTable(true);
             setShowButton(true);
@@ -313,7 +327,10 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
             }
         })
 
-        if (jsonData.length > 0) {
+        if (jsonData.length >= 0) {
+            if (jsonData.length === 0) {
+                jsonData.push({ ID: "", Monto: 0})
+            }
             let wb = XLSX.utils.book_new();
             let ws = XLSX.utils.json_to_sheet(jsonData);
 

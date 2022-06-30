@@ -5,7 +5,7 @@ import { Stack } from 'react-bootstrap';
 import { posibleStatus, selectUsersFetchError, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
 import { getAllUsers } from '../../actions/user/getAllUsers';
 import './Payroll.css'
-import { selectAccountsFetchError, selectAccountsState, selectAccountsStatus } from '../../state/slice/accountSlice';
+import { accountType, selectAccountsFetchError, selectAccountsState, selectAccountsStatus } from '../../state/slice/accountSlice';
 import { selectTransactionsFetchError, selectTransactionsState, selectTransactionsStatus, transactionType } from '../../state/slice/transactionSlice';
 import { getAllAccountsFinal } from '../../actions/account/getAllAccounts';
 import { getAllTransactions } from '../../actions/transactions/getAllTransactions';
@@ -67,7 +67,6 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
 
     const [excelState, setExcelState] = useState<account[]>([]);
     const [showButton, setShowButton] = useState<boolean>(false);
-    const [showError, setShowError] = useState<boolean>(false);
     const [showTable, setShowTable] = useState<boolean>(false);
 
     const { emailState } = useAppSelector((state: RootState) => state.logged)
@@ -241,8 +240,12 @@ const PayRoll: FunctionComponent<IUserProps> = (props) => {
                         }
                         dispatch(createTransaction(newTransaction));
                         const account = accountsLists.find((account) => account.correoUsuario === trans.ID);
-                        if (account && account.monto) {
-                            const newAccount = { ...account, monto: (account.monto + trans.Monto) }
+                        if (account) {
+                            const newAccount: accountType = {
+                                id: account.id,
+                                correoUsuario: account.correoUsuario,
+                                monto: account?.monto! + trans.Monto
+                            }
                             dispatch(updateAccount(newAccount));
                         } else {
                             const newAccount = { id: nanoid(), correoUsuario: trans.ID, monto: trans.Monto }

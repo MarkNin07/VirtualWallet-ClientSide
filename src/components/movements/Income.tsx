@@ -1,11 +1,10 @@
 import { Table } from '@mantine/core';
-import React, {useEffect} from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getAllTransactions } from '../../actions/transactions/getAllTransactions';
-import { getAllUsers } from '../../actions/user/getAllUsers';
 import { selectTransactionsState, selectTransactionsStatus } from '../../state/slice/transactionSlice';
-import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../state/slice/userSlice';
+import { posibleStatus } from '../../state/slice/userSlice';
 import { RootState, useAppDispatch } from '../../store';
 
 interface stateBecauseSend {  

@@ -37,7 +37,7 @@ const SingIn: React.FunctionComponent<ISingInProps> = (props) => {
     const signInForm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
 
-        const regularExpression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+        const regularExpression = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?/_'’+>!"$%±&¿³¡²?;µ.:§ª¨·,¶¹<=»«´¯({ñ¥Ñ|£°¬}`~)!¢÷‰@^*ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ€≠≤≥√Ω-]).{8,}$/
         const nameRegularExpresion = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/
 
         if (email && password.match(regularExpression) && name.match(nameRegularExpresion)) {

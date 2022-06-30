@@ -1,7 +1,7 @@
 import { Table } from '@mantine/core';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getAllTransactions } from '../../actions/transactions/getAllTransactions';
 import { selectTransactionsState, selectTransactionsStatus } from '../../state/slice/transactionSlice';
 import { posibleStatus } from '../../state/slice/userSlice';

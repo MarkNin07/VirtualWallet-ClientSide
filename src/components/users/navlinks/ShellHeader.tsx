@@ -4,12 +4,11 @@ import ToggleDarkButton from "../ToggleDarkButton";
 import { forwardRef } from "react";
 import { ChevronRight } from 'tabler-icons-react';
 import { signOut } from 'firebase/auth';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { getAllUsers } from '../../../actions/user/getAllUsers';
 import { posibleStatus, selectUsersState, selectUsersStatus, userType } from '../../../state/slice/userSlice';
 import { RootState, useAppDispatch } from '../../../store';
-import User from '../User';
 import { auth } from '../../../fireabseConfig';
 import { updateUser } from '../../../actions/user/updateUser';
 

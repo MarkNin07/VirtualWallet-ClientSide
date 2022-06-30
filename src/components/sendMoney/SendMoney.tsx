@@ -37,15 +37,6 @@ const SendMoney: React.FunctionComponent = (props) => {
       }
    }, [dispatch])
 
-   /*
-   const location = useLocation()
-   const state = location.state as stateBecauseSend
-   const { stateSend } = state*/
-
-   const getUsers = useAppSelector(selectUsersState())
-
-   //const usuarioOrigen = getUsers.find((user) => user.id === stateSend) as userType
-
    const getAccounts = useAppSelector(selectAccountsState())
 
    const { emailState } = useAppSelector((state: RootState) => state.logged)
@@ -54,7 +45,7 @@ const SendMoney: React.FunctionComponent = (props) => {
 
    const onSendMoney = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-      if (productoDestino && monto && (monto <= cuentaOrigen?.monto!) && productoDestino !== cuentaOrigen?.correoUsuario) {
+      if (productoDestino && monto && (monto > 0) && (monto <= cuentaOrigen?.monto!) && productoDestino !== cuentaOrigen?.correoUsuario) {
 
          if (productoDestino === cuentaOrigen?.correoUsuario) {
             Swal.fire({

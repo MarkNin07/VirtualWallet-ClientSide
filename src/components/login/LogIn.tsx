@@ -55,7 +55,6 @@ const LogIn: React.FunctionComponent<ILogInProps> = (props) => {
         .then((result) => {
           if (!result.user.emailVerified) {
             const verified = result.user.emailVerified
-            const photo = result.user.photoURL
             dispatch(verifiedInInReducer(verified))
             navigate('/verifyEmail')
           }

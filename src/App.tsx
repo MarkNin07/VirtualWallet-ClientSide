@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import {ColorScheme, ColorSchemeProvider, MantineProvider} from "@mantine/core";
-import {useHotkeys, useLocalStorage} from "@mantine/hooks";
+import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core";
+import { useHotkeys, useLocalStorage } from "@mantine/hooks";
+import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./AppRoutes";
 
 function App() {
@@ -18,7 +18,9 @@ function App() {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        <AppRoutes />
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
       </MantineProvider>
     </ColorSchemeProvider>
   )

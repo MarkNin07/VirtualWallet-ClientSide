@@ -1,5 +1,4 @@
 import React, { useEffect } from "react"
-import { Aside, MediaQuery, ScrollArea, Text } from "@mantine/core";
 import { Table } from '@mantine/core';
 import { posibleStatus, selectUsersState, selectUsersStatus, userType } from "../../../state/slice/userSlice";
 import { useSelector } from "react-redux";
